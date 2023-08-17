@@ -12,8 +12,8 @@ services:
     environment:
       - STATS_SERVER_URL=http://server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://explore-db:5432/main-db
-      - SPRING_DATASOURCE_USERNAME=raisa
-      - SPRING_DATASOURCE_PASSWORD=raisa
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
 
   explore-db:
     image: postgres:14-alpine
@@ -22,8 +22,8 @@ services:
       - "6541:5432"
     environment:
       - POSTGRES_DB=main-db
-      - POSTGRES_USER=raisa
-      - POSTGRES_PASSWORD=raisa
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
 
   stats-server:
     build: ./stats
@@ -35,8 +35,8 @@ services:
       - stats-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
-      - SPRING_DATASOURCE_USERNAME=raisa
-      - SPRING_DATASOURCE_PASSWORD=raisa
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
 
   stats-db:
     image: postgres:14-alpine
@@ -45,5 +45,5 @@ services:
       - "6542:5432"
     environment:
       - POSTGRES_DB=stats-db
-      - POSTGRES_USER=raisa
-      - POSTGRES_PASSWORD=raisa
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
