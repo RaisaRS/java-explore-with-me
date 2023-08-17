@@ -15,11 +15,11 @@
 	<groupId>ru.practicum</groupId>
 	<artifactId>explore-with-me</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<relativePath>pom.xml</relativePath>
+	<packaging>pom</packaging>
 
 	<modules>
-		<module>stats</module>
 		<module>service-main</module>
+		<module>stats</module>
 	</modules>
 
 	<properties>
@@ -188,6 +188,5 @@
 			</build>
 		</profile>
 	</profiles>
-
 
 </project>
