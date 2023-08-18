@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 //@RequiredArgsConstructor
+@Entity
 @Table(name = "hits", schema = "public")
 @Builder
 public class ModelHit {

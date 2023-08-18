@@ -1,7 +1,7 @@
 version: '3.1'
 services:
   explore-service:
-    build: ./main
+    build: ./service-main
     image: service-main-image
     container_name: service-main-container
     ports:
@@ -26,9 +26,9 @@ services:
       - POSTGRES_PASSWORD=root
 
   stats-server:
-    build: ./stats
-    image: stats-service-image
-    container_name: stats-service-container
+    build: ./stats/stats-server
+    image: stats-server-image
+    container_name: stats-server-container
     ports:
       - "9090:9090"
     depends_on:
