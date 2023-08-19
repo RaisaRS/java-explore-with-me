@@ -32,7 +32,7 @@ public class StatsController {
     public HitDto addHit(@RequestBody HitDto hitDto) {
         log.info("[POST /hit]. Создан запрос по (app: {}, client ip: {}, endpoint path: {}, time: {})",
                 hitDto.getApp(), hitDto.getIp(), hitDto.getUri(), hitDto.getTimestamp());
-       return toHitDto(statsService.saveHit(hitDto));
+        return toHitDto(statsService.saveHit(hitDto));
 
     }
 
@@ -43,9 +43,9 @@ public class StatsController {
                                    @RequestParam(required = false, defaultValue = "false") Boolean unique) {
         LocalDateTime startDate = LocalDateTime.parse(start, dateTimeFormatter);
         LocalDateTime endDate = LocalDateTime.parse(end, dateTimeFormatter);
-                 if(startDate.isAfter(endDate)) {
+        if (startDate.isAfter(endDate)) {
             log.warn("Дата начала {} должна быть ранее даты окончания {}.", start, end);
-              throw new IllegalArgumentException("Дата начала {} должна быть ранее даты окончания {}." + start + end);
+            throw new IllegalArgumentException("Дата начала {} должна быть ранее даты окончания {}." + start + end);
         }
 
         var result = statsService.getStats(startDate, endDate, uris, unique);

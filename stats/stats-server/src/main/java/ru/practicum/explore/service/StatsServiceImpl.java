@@ -34,8 +34,8 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         List<StatsDto> hits;
-        if(unique) {
-                hits =  getUniqueHits(start, end, uris);
+        if (unique) {
+            hits = getUniqueHits(start, end, uris);
         } else {
             hits = getAllHits(start, end, uris);
         }
@@ -47,7 +47,8 @@ public class StatsServiceImpl implements StatsService {
         List<StatsDto> hits;
         if (uris == null) {
             log.info("Uris is null");
-            hits = statsRepository.findAllUniqueIp(start, end);;
+            hits = statsRepository.findAllUniqueIp(start, end);
+            ;
         } else {
             log.info("Uris : {}", uris);
             hits = statsRepository.findStatsByUrisByUniqueIp(start, end, uris);

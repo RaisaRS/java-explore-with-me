@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class ModelMapper {
 
     public static ModelHit toModelHit(HitDto hitDto) {
-       return ModelHit.builder()
+        return ModelHit.builder()
                 .app(hitDto.getApp())
                 .uri(hitDto.getUri())
                 .ip(hitDto.getIp())
@@ -37,7 +37,7 @@ public class ModelMapper {
                 .build();
     }
 
-    public static List<StatsDto> statsDtos (List<ModelStats> modelStatsList) {
+    public static List<StatsDto> statsDtos(List<ModelStats> modelStatsList) {
         return modelStatsList.stream()
                 .map(ModelMapper::toStatsDto)
                 .collect(Collectors.toList());
