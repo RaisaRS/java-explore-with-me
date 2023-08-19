@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <name>Stats </name>
+    <name>Stats</name>
 
     <artifactId>stats</artifactId>
     <version>0.0.1-SNAPSHOT</version>

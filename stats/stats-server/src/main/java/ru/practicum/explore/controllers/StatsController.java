@@ -31,7 +31,7 @@ public class StatsController {
     @ResponseStatus(code = HttpStatus.CREATED)
     public HitDto addHit(@RequestBody HitDto hitDto) {
         log.info("[POST /hit]. Создан запрос по (app: {}, client ip: {}, endpoint path: {}, time: {})",
-                hitDto.getApp(), hitDto.getIp(), hitDto.getUri(), hitDto.getTime());
+                hitDto.getApp(), hitDto.getIp(), hitDto.getUri(), hitDto.getTimestamp());
        return toHitDto(statsService.saveHit(hitDto));
 
     }
@@ -48,16 +48,8 @@ public class StatsController {
               throw new IllegalArgumentException("Дата начала {} должна быть ранее даты окончания {}." + start + end);
         }
 
-//    public List<StatsDto> getStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-//                                   @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
-//                                   @RequestParam(required = false) List<String> uris,
-//                                   @RequestParam(required = false, defaultValue = "false") Boolean unique) {
-
-//         if(start.isAfter(end)) {
-//            log.warn("Дата начала {} должна быть ранее даты окончания {}.", start, end);
-//              throw new IllegalArgumentException("Дата начала {} должна быть ранее даты окончания {}." + start + end);
-//        }
         var result = statsService.getStats(startDate, endDate, uris, unique);
+
         log.info("[GET /stats?start={start}&end={end}&uris={uris}&unique={unique}]." +
                         " Запрошена статистика за период с даты: {} по дату: {} по uris: {} (unique: {})",
                 start, end, uris, unique);

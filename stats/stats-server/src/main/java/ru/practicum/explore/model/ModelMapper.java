@@ -15,16 +15,17 @@ public class ModelMapper {
                 .app(hitDto.getApp())
                 .uri(hitDto.getUri())
                 .ip(hitDto.getIp())
-                .time(hitDto.getTime())
+                .timestamp(hitDto.getTimestamp())
                 .build();
     }
 
     public static HitDto toHitDto(ModelHit modelHit) {
         return HitDto.builder()
+                //.id(modelHit.getId())
                 .app(modelHit.getApp())
                 .uri(modelHit.getUri())
                 .ip(modelHit.getIp())
-                .time(modelHit.getTime())
+                .timestamp(modelHit.getTimestamp())
                 .build();
     }
 

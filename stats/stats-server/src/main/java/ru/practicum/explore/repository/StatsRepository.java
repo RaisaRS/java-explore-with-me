@@ -14,14 +14,14 @@ import java.util.List;
 public interface StatsRepository extends JpaRepository<ModelHit, Long> {
     @Query("select new ru.practicum.explore.useDto.dto.StatsDto(mh.app, mh.uri, count(mh.ip)) " +
             "from ModelHit mh " +
-            "where mh.time between ?1 and ?2 " +
+            "where mh.timestamp between ?1 and ?2 " +
             "group by mh.app, mh.uri " +
             "order by count(mh.ip) desc")
     List<StatsDto> findAll(LocalDateTime start, LocalDateTime end);
 
     @Query("select new ru.practicum.explore.useDto.dto.StatsDto(mh.app, mh.uri, count(distinct mh.ip)) " +
             "from ModelHit mh " +
-            "where mh.time between ?1 and ?2 " +
+            "where mh.timestamp between ?1 and ?2 " +
             "and mh.uri in (?3) " +
             "group by mh.app, mh.uri " +
             "order by count(distinct mh.ip) desc")
@@ -29,17 +29,17 @@ public interface StatsRepository extends JpaRepository<ModelHit, Long> {
 
     @Query("select new ru.practicum.explore.useDto.dto.StatsDto(mh.app, mh.uri, count(mh.ip)) " +
             "from ModelHit mh " +
-            "where mh.time between ?1 and ?2 " +
+            "where mh.timestamp between ?1 and ?2 " +
             "and mh.uri in (?3) " +
             "group by mh.app, mh.uri " +
             "order by count(mh.ip) desc")
-    List<StatsDto> findAllUris(LocalDateTime start, LocalDateTime end, List<String> uris);
+    List<StatsDto> findAllByUris(LocalDateTime start, LocalDateTime end, List<String> uris);
 
     @Query("select new ru.practicum.explore.useDto.dto.StatsDto(mh.app, mh.uri, count(distinct mh.ip)) " +
             "from ModelHit mh " +
-            "where mh.time between ?1 and ?2 " +
+            "where mh.timestamp between ?1 and ?2 " +
             "and mh.uri in (?3) " +
             "group by mh.app, mh.uri " +
             "order by count(distinct mh.ip) desc")
-    List<StatsDto> findStatsByUrisWithUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris);
+    List<StatsDto> findStatsByUrisByUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris);
 }

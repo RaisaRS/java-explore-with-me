@@ -13,11 +13,10 @@ import javax.persistence.Column;
 @NoArgsConstructor(force = true)
 @Builder
 public class ModelStats {
-    @Column
+    @Column(name = "app", nullable = false)
     private String app;
-    @Column
+    @Column(name = "uri", nullable = false)
     private String uri;
-    @Column(name = "ip", nullable = false)
-    //@Column
+    @Column(name = "countIp", nullable = false)
     private Long hits;
 }

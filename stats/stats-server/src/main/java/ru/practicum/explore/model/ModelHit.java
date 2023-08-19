@@ -24,6 +24,6 @@ public class ModelHit {
     @Column(name = "ip", nullable = false)
     private String ip;
     @Column(name = "date_time", nullable = false)
-    private LocalDateTime time;
+    private LocalDateTime timestamp;
 
 }
