@@ -3,10 +3,10 @@ package ru.practicum.explore.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.practicum.explore.useDto.dto.HitDto;
-import ru.practicum.explore.useDto.dto.StatsDto;
 import ru.practicum.explore.model.ModelHit;
 import ru.practicum.explore.repository.StatsRepository;
+import ru.practicum.explore.useDto.dto.HitDto;
+import ru.practicum.explore.useDto.dto.StatsDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
