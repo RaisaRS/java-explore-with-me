@@ -9,6 +9,7 @@ import ru.practicum.explore.model.ModelHit;
 import ru.practicum.explore.repository.StatsRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static ru.practicum.explore.model.ModelMapper.toModelHit;
@@ -18,6 +19,7 @@ import static ru.practicum.explore.model.ModelMapper.toModelHit;
 public class StatsServiceImpl implements StatsService {
 
     private final StatsRepository statsRepository;
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     public StatsServiceImpl(StatsRepository statsRepository) {
@@ -32,12 +34,21 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+    public List<StatsDto> getStats(String start, String end, List<String> uris, boolean unique) {
+
+        LocalDateTime startTime = LocalDateTime.parse(start, dateTimeFormatter);
+        LocalDateTime endTime = LocalDateTime.parse(end, dateTimeFormatter);
+        if (startTime.isAfter(endTime)) {
+            log.warn("Дата начала {} должна быть ранее даты окончания {}.", startTime, endTime);
+            throw new IllegalArgumentException("Дата начала {} должна быть ранее даты окончания {}."
+                    + startTime + endTime);
+        }
+
         List<StatsDto> hits;
         if (unique) {
-            hits = getUniqueHits(start, end, uris);
+            hits = getUniqueHits(startTime, endTime, uris);
         } else {
-            hits = getAllHits(start, end, uris);
+            hits = getAllHits(startTime, endTime, uris);
         }
         return hits;
     }

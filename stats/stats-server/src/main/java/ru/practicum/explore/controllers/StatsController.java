@@ -19,7 +19,7 @@ import static ru.practicum.explore.model.ModelMapper.toHitDto;
 public class StatsController {
 
     private final StatsService statsService;
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 
     @Autowired
     public StatsController(StatsService statsService) {
@@ -40,18 +40,11 @@ public class StatsController {
                                    @RequestParam String end,
                                    @RequestParam(required = false) List<String> uris,
                                    @RequestParam(required = false, defaultValue = "false") Boolean unique) {
-        LocalDateTime startDate = LocalDateTime.parse(start, dateTimeFormatter);
-        LocalDateTime endDate = LocalDateTime.parse(end, dateTimeFormatter);
-        if (startDate.isAfter(endDate)) {
-            log.warn("Дата начала {} должна быть ранее даты окончания {}.", start, end);
-            throw new IllegalArgumentException("Дата начала {} должна быть ранее даты окончания {}." + start + end);
-        }
-
-        var result = statsService.getStats(startDate, endDate, uris, unique);
 
         log.info("[GET /stats?start={start}&end={end}&uris={uris}&unique={unique}]." +
                         " Запрошена статистика за период с даты: {} по дату: {} по uris: {} (unique: {})",
                 start, end, uris, unique);
-        return result;
+
+        return statsService.getStats(start, end, uris, unique);
     }
 }

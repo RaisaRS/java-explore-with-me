@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-//@RequiredArgsConstructor
 @Entity
 @Table(name = "hits", schema = "public")
 @Builder

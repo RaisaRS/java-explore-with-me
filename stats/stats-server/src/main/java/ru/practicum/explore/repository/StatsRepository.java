@@ -3,6 +3,7 @@ package ru.practicum.explore.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Repository;
 import ru.practicum.explore.useDto.dto.StatsDto;
 import ru.practicum.explore.model.ModelHit;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-@EnableJpaRepositories
+@Repository
 public interface StatsRepository extends JpaRepository<ModelHit, Long> {
     @Query("select new ru.practicum.explore.useDto.dto.StatsDto(mh.app, mh.uri, count(mh.ip)) " +
             "from ModelHit mh " +

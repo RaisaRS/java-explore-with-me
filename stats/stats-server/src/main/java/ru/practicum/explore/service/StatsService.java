@@ -10,5 +10,5 @@ import java.util.List;
 public interface StatsService {
     ModelHit saveHit(HitDto hitDto);
 
-    List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique);
+    List<StatsDto> getStats(String start, String end, List<String> uris, boolean unique);
 }
