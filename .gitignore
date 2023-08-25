@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+*.class
+*.jar
+*.DS_Store
