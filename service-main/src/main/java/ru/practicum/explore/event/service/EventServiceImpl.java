@@ -266,9 +266,10 @@ public class EventServiceImpl implements EventService {
         }
 
         Pageable pageable = PageRequest.of(param.getFrom() / param.getSize(), param.getSize(),
-                org.springframework.data.domain.Sort.by(org.springframework.data.domain.
-                        Sort.Direction.ASC, "id"));
-
+                org.springframework.data.domain
+                        .Sort.by(org.springframework.data.domain
+                                .Sort.Direction.ASC, "id"));
+// тут тест
         AdminSearchCriteria criteria = AdminSearchCriteria.builder()
                 .users(param.getUsers())
                 .states(param.getStates())
