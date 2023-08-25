@@ -33,8 +33,9 @@ build/
 .vscode/
 *.class
 *.jar
-*.DS_Store
 /.mv.db
 /.trace.db
-db
-.db
+*.db
+db/*
+.mvn
+*.DS_Store
