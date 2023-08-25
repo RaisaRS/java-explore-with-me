@@ -13,7 +13,6 @@ import ru.practicum.explore.compilation.dto.CompilationUpdateDto;
 import ru.practicum.explore.event.Event;
 import ru.practicum.explore.event.repositoryes.EventRepository;
 import ru.practicum.explore.exceptions.NotFoundException;
-import ru.practicum.explore.util.CreateRequest;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +44,7 @@ public class CompilationServiceImpl implements CompilationService {
     public CompilationDto updateCompilation(Long compilationId, CompilationUpdateDto compilationDto) {
         Compilation updatedCompilation = compilationRepository.findById(compilationId)
                 .orElseThrow(() -> new NotFoundException(
-                        "Подборка событий не найдена, id = "+ compilationId));
+                        "Подборка событий не найдена, id = " + compilationId));
 
         if (compilationDto.getTitle() != null) {
             updatedCompilation.setTitle(compilationDto.getTitle());

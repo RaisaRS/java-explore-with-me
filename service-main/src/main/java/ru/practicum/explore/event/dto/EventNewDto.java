@@ -2,8 +2,8 @@ package ru.practicum.explore.event.dto;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-import ru.practicum.explore.location.LocationDto;
 import ru.practicum.explore.event.search.Sort;
+import ru.practicum.explore.location.LocationDto;
 import ru.practicum.explore.user.dto.UserDto;
 
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ public class EventNewDto {
     private LocationDto location;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private  LocalDateTime rangeStart;
+    private LocalDateTime rangeStart;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime rangeEnd;

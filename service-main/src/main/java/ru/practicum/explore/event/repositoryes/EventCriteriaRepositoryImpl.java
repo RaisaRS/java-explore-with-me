@@ -3,11 +3,11 @@ package ru.practicum.explore.event.repositoryes;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 import ru.practicum.explore.category.Category;
 import ru.practicum.explore.event.Event;
 import ru.practicum.explore.event.search.AdminSearchCriteria;
 import ru.practicum.explore.event.search.CriteriaUser;
-import ru.practicum.explore.event.search.PublicSearchCriteria;
 import ru.practicum.explore.user.User;
 
 import javax.persistence.EntityManager;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Repository
 public class EventCriteriaRepositoryImpl implements EventCriteriaRepository {
 
     private final EntityManager entityManager;
@@ -27,6 +28,7 @@ public class EventCriteriaRepositoryImpl implements EventCriteriaRepository {
         this.entityManager = entityManager;
         this.criteriaBuilder = entityManager.getCriteriaBuilder();
     }
+
     @Override
     public Page<Event> findByParamUser(Pageable pageable, CriteriaUser criteriaUser) {
 

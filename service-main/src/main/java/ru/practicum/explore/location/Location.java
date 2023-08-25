@@ -22,7 +22,7 @@ public class Location {
     @Column(name = "lon", nullable = false)
     private Float lon;
 
-    public Location(Float lat, Float lon){
+    public Location(Float lat, Float lon) {
         this.lat = lat;
         this.lon = lon;
     }

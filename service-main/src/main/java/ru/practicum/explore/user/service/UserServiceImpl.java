@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.explore.util.CreateRequest;
 import ru.practicum.explore.user.User;
 import ru.practicum.explore.user.UserRepository;
 import ru.practicum.explore.user.dto.UserDto;
 import ru.practicum.explore.user.dto.UserMapper;
+import ru.practicum.explore.util.CreateRequest;
 
 import java.util.Collections;
 import java.util.List;

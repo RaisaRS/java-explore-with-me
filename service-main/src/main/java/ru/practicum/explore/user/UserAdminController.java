@@ -31,7 +31,7 @@ public class UserAdminController {
                                   @RequestParam(required = false, defaultValue = "0") int from,
                                   @RequestParam(required = false, defaultValue = "10") int size) {
         log.info("Получен GET- запрос на просмотр списка пользователей (ids): {}  с параметрами from {}, size {} ",
-                ids, from, size );
+                ids, from, size);
         return userService.getUsers(ids, from, size);
     }
 

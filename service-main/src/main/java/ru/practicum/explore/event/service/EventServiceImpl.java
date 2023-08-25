@@ -2,7 +2,6 @@ package ru.practicum.explore.event.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,10 +13,11 @@ import ru.practicum.explore.enums.EventState;
 import ru.practicum.explore.enums.RequestStatus;
 import ru.practicum.explore.enums.StateActionAdmin;
 import ru.practicum.explore.event.Event;
-import ru.practicum.explore.event.repositoryes.EventRepository;
 import ru.practicum.explore.event.dto.*;
+import ru.practicum.explore.event.repositoryes.EventRepository;
 import ru.practicum.explore.event.search.AdminSearchCriteria;
 import ru.practicum.explore.event.search.CriteriaUser;
+import ru.practicum.explore.event.search.PublicSearchCriteria;
 import ru.practicum.explore.exceptions.ConflictException;
 import ru.practicum.explore.exceptions.NotFoundException;
 import ru.practicum.explore.exceptions.ParameterException;
@@ -30,7 +30,6 @@ import ru.practicum.explore.request.dto.RequestDto;
 import ru.practicum.explore.request.dto.RequestMapper;
 import ru.practicum.explore.request.dto.RequestUpdateDto;
 import ru.practicum.explore.request.dto.RequestUpdateResultDto;
-import ru.practicum.explore.event.search.PublicSearchCriteria;
 import ru.practicum.explore.useDto.dto.HitDto;
 import ru.practicum.explore.useDto.dto.StatsDto;
 import ru.practicum.explore.user.User;
@@ -39,7 +38,6 @@ import ru.practicum.explore.util.CountConfirmedRequests;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -55,8 +53,8 @@ public class EventServiceImpl implements EventService {
     //@Autowired
     private final StatsClient statsClient;
     private final CategoryRepository categoryRepository;
-    @Value("${app.stats.url}")
-    private  String serviceName;
+//    @Value("${app.stats.url}")
+//    private String serviceName;
 
     @Override
     public EventFullDto saveEvent(Long userId, EventDto eventDto) {
@@ -81,7 +79,7 @@ public class EventServiceImpl implements EventService {
         Event afterCreate = eventRepository.save(createdEvent);
         log.info("Создано событие: {} ", afterCreate);
 
-          return EventMapper.toEventFullDto(afterCreate);
+        return EventMapper.toEventFullDto(afterCreate);
     }
 
     @Override
@@ -120,7 +118,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto updateEventByAdmin(Long eventId, EventUpdateRequestAdmin eventUpdateRequestAdmin) {
-       Event eventToUpdateAdmin = eventRepository.findById(eventId).orElseThrow(() ->
+        Event eventToUpdateAdmin = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException("Попытка обновления уже опубликованного события " +
                         "от имени администратора, id события: " + eventId));
 
@@ -322,7 +320,7 @@ public class EventServiceImpl implements EventService {
 
         HttpServletRequest request = param.getRequest();
         HitDto hitDto = HitDto.builder().ip(request.getRemoteAddr()).uri(request
-                .getRequestURI()).app(serviceName).timestamp(LocalDateTime.now()).build();
+                .getRequestURI()).app("app.stats.url").timestamp(LocalDateTime.now()).build();
         statsClient.saveStats(hitDto.getApp(), hitDto.getUri(), hitDto.getIp(), hitDto.getTimestamp());
         log.info(" events.size()= {}  ", events.size());
         return events.stream()
@@ -337,11 +335,10 @@ public class EventServiceImpl implements EventService {
         return !event.getRequestModeration()
                 ? requests.stream()
                 .filter(request -> request.getStatus().equals(RequestStatus.CONFIRMED) ||
-                request.getStatus().equals(RequestStatus.PENDING)).count()
+                        request.getStatus().equals(RequestStatus.PENDING)).count()
                 : requests.stream()
                 .filter(request -> request.getStatus().equals(RequestStatus.CONFIRMED)).count();
     }
-
 
 
     private Long getViews(Long eventId) {

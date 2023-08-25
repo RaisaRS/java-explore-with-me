@@ -2,11 +2,11 @@ package ru.practicum.explore.event.dto;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.explore.category.dto.CategoryMapper;
-import ru.practicum.explore.util.CountConfirmedRequests;
 import ru.practicum.explore.event.Event;
 import ru.practicum.explore.location.LocationDto;
 import ru.practicum.explore.user.User;
 import ru.practicum.explore.user.dto.UserMapper;
+import ru.practicum.explore.util.CountConfirmedRequests;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -53,7 +53,7 @@ public class EventMapper {
 
     public static List<EventShortDto> listEventShortDto(List<Event> events) {
         List<EventShortDto> eventShortDtos = new ArrayList<>();
-        for(Event e : events) {
+        for (Event e : events) {
             eventShortDtos.add(toEventShortDto(e));
         }
         return eventShortDtos;

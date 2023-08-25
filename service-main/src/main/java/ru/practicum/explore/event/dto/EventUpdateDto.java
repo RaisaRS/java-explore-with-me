@@ -39,7 +39,7 @@ public class EventUpdateDto {
 
     private Boolean paid;
 
-   // private EventStateAction stateAction;
+    // private EventStateAction stateAction;
 //    SEND_TO_REVIEW,
 //    CANCEL_REVIEW,
 //    PUBLISH_EVENT,

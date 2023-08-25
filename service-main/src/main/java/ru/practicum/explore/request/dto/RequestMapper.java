@@ -40,7 +40,7 @@ public class RequestMapper {
                 .build();
     }
 
-    public static List<RequestDto> listRequestDtos (List<Request> requests) {
+    public static List<RequestDto> listRequestDtos(List<Request> requests) {
         return requests.stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());

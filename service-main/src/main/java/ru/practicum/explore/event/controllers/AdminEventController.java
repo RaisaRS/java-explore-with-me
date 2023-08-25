@@ -6,19 +6,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.enums.EventState;
-import ru.practicum.explore.event.dto.*;
+import ru.practicum.explore.event.dto.EventFullDto;
+import ru.practicum.explore.event.dto.EventUpdateRequestAdmin;
 import ru.practicum.explore.event.search.AdminSearchCriteria;
-import ru.practicum.explore.event.search.PublicSearchCriteria;
 import ru.practicum.explore.event.service.EventService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,14 +30,14 @@ public class AdminEventController {
 
     @GetMapping
     public List<EventFullDto> searchEventsByAdmin(@RequestParam(required = false) List<Long> users,
-                                                   @RequestParam(required = false) List<String> states,
-                                                   @RequestParam(required = false) List<Long> categories,
-                                                   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                       @RequestParam(required = false) LocalDateTime rangeStart,
-                                                   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                       @RequestParam(required = false) LocalDateTime rangeEnd,
-                                                   @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-                                                   @RequestParam(defaultValue = "10") @Positive int size) {
+                                                  @RequestParam(required = false) List<String> states,
+                                                  @RequestParam(required = false) List<Long> categories,
+                                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                                  @RequestParam(required = false) LocalDateTime rangeStart,
+                                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                                  @RequestParam(required = false) LocalDateTime rangeEnd,
+                                                  @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                                  @RequestParam(defaultValue = "10") @Positive int size) {
 
 
         List<EventState> statesEnum = null;
