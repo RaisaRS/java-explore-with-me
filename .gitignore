@@ -34,3 +34,6 @@ build/
 *.class
 *.jar
 *.DS_Store
+*.mv.db
+*.trace.db
+db
