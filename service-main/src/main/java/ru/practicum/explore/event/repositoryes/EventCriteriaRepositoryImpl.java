@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.explore.category.Category;
 import ru.practicum.explore.event.Event;
 import ru.practicum.explore.event.search.AdminSearchCriteria;
+import ru.practicum.explore.event.search.CriteriaAdmin;
 import ru.practicum.explore.event.search.CriteriaUser;
 import ru.practicum.explore.user.User;
 
@@ -51,7 +52,7 @@ public class EventCriteriaRepositoryImpl implements EventCriteriaRepository {
     }
 
     @Override
-    public Page<Event> findByParamAdmin(Pageable pageable, AdminSearchCriteria criteriaAdmin) {
+    public Page<Event> findByParamAdmin(Pageable pageable, CriteriaAdmin criteriaAdmin) {
         CriteriaQuery<Event> criteriaQuery = criteriaBuilder.createQuery(Event.class);
         Root<Event> eventRoot = criteriaQuery.from(Event.class);
         Predicate predicate = getAdminPredicate(criteriaAdmin, eventRoot);
@@ -70,7 +71,7 @@ public class EventCriteriaRepositoryImpl implements EventCriteriaRepository {
         return new PageImpl<>(events);
     }
 
-    private Predicate getAdminPredicate(AdminSearchCriteria criteriaAdmin, Root<Event> eventRoot) {
+    private Predicate getAdminPredicate(CriteriaAdmin criteriaAdmin, Root<Event> eventRoot) {
         List<Predicate> predicates = new ArrayList<>();
 
         if (criteriaAdmin != null && criteriaAdmin.getCategories() != null && !criteriaAdmin.getCategories().isEmpty()) {

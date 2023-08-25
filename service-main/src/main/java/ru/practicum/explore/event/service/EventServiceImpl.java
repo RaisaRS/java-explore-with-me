@@ -15,6 +15,7 @@ import ru.practicum.explore.event.Event;
 import ru.practicum.explore.event.dto.*;
 import ru.practicum.explore.event.repositoryes.EventRepository;
 import ru.practicum.explore.event.search.AdminSearchCriteria;
+import ru.practicum.explore.event.search.CriteriaAdmin;
 import ru.practicum.explore.event.search.CriteriaUser;
 import ru.practicum.explore.event.search.PublicSearchCriteria;
 import ru.practicum.explore.exceptions.ConflictException;
@@ -70,15 +71,30 @@ public class EventServiceImpl implements EventService {
         createdEvent.setCategory(category);
         createdEvent.setCreatedOn(LocalDateTime.now());
         createdEvent.setState(EventState.PENDING);
+        createdEvent.setInitiator(user);
 
         Location location = getLocation(eventDto.getLocation());
 
         createdEvent.setLocation(location);
+        //Long confirmedRequests = CountConfirmedRequests.countConfirmedRequests(createdEvent);
+
 
         Event afterCreate = eventRepository.save(createdEvent);
         log.info("Создано событие: {} ", afterCreate);
+        //EventFullDto eventFullDto = EventMapper.toEventFullDto(afterCreate);
 
         return EventMapper.toEventFullDto(afterCreate);
+    }
+
+    private EventFullDto setConfirmedRequests(EventFullDto eventFullDto) {
+        eventFullDto.setConfirmedRequests(requestRepository.countByEventIdAndConfirmed(eventFullDto.getId()));
+        return eventFullDto;
+    }
+
+    private void setConfirmedRequests(List<EventFullDto> events) {
+        for (EventFullDto event : events) {
+            event.setConfirmedRequests(requestRepository.countByEventIdAndConfirmed(event.getId()));
+        }
     }
 
     @Override
@@ -86,6 +102,7 @@ public class EventServiceImpl implements EventService {
         Event event = getEvent(eventId, userId);
         EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
         eventFullDto.setViews(getViews(event.getId()));
+        setConfirmedRequests(eventFullDto);
         log.info("Cобытие {} запрошено по id пользователя {} , администратором", eventFullDto, userId);
         return eventFullDto;
     }
@@ -110,9 +127,10 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        Event updated = eventRepository.save(eventForUpdate);
+        EventFullDto updated = EventMapper.toEventFullDto(eventRepository.save(eventForUpdate));
+        setConfirmedRequests(updated);
         log.info("Обновлён статус события пользователем");
-        return EventMapper.toEventFullDto(updated);
+        return updated;
     }
 
     @Override
@@ -152,10 +170,12 @@ public class EventServiceImpl implements EventService {
 
         updateEventFields(eventToUpdateAdmin, eventUpdateRequestAdmin);
 
-        Event eventUpdated = eventRepository.save(eventToUpdateAdmin);
+        EventFullDto eventUpdated = EventMapper.toEventFullDto(eventRepository.save(eventToUpdateAdmin));
+        setConfirmedRequests(eventUpdated);
         log.info("Событие, обновленное администратором: {}.", eventUpdated);
 
-        return EventMapper.toEventFullDto(eventUpdated);
+
+        return eventUpdated;
     }
 
     @Override
@@ -243,7 +263,7 @@ public class EventServiceImpl implements EventService {
         PageRequest pageRequest = createRequest(from, size);
         List<Event> result = eventRepository.findAllByInitiatorId(userId, pageRequest).getContent();
         log.info("Все события, созданные инициатором");
-        return result.size() == 0 ? Collections.emptyList() : EventMapper.listEventShortDto(result);
+        return result.isEmpty() ? Collections.emptyList() : EventMapper.listEventShortDto(result);
     }
 
     @Override
@@ -270,7 +290,7 @@ public class EventServiceImpl implements EventService {
                         .Sort.by(org.springframework.data.domain
                                 .Sort.Direction.ASC, "id"));
 // тут тест
-        AdminSearchCriteria criteria = AdminSearchCriteria.builder()
+        CriteriaAdmin criteria =CriteriaAdmin.builder()
                 .users(param.getUsers())
                 .states(param.getStates())
                 .categories(param.getCategories())
@@ -287,6 +307,7 @@ public class EventServiceImpl implements EventService {
                 .map(EventMapper::toEventFullDto)
                 .collect(Collectors.toList());
 
+        setConfirmedRequests(eventFullDtos);
         log.info("events.size() {}", events.size());
         return eventFullDtos.stream()
                 .peek(eventFullDto -> eventFullDto.setViews(this.getViews(eventFullDto.getId())))

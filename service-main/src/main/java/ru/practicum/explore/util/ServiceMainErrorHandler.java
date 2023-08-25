@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.explore.exceptions.ConflictException;
 import ru.practicum.explore.exceptions.NotFoundException;
 import ru.practicum.explore.exceptions.ParameterException;
@@ -16,28 +17,35 @@ public class ServiceMainErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFound(final NotFoundException e) {
-        log.error("The required object was not found. {}", e.getMessage());
+        log.error("Объект не найден. {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleParameter(final ParameterException e) {
-        log.error("Incorrectly made request. {}", e.getMessage());
+        log.error("Некорректный запрос. {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleParamConflict(final ConflictException e) {
-        log.error("Incorrectly made request. {}", e.getMessage());
+        log.error("Некорректный запрос. {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleNotUnique(final DataIntegrityViolationException e) {
-        log.error("Integrity constraint has been violated. {}", e.getMessage());
+        log.error("Ограничение целостности было нарушено. {}", e.getMessage());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgumentException(final IllegalArgumentException e) {
+        log.error("Аттеншн: Используется несоответствующий тип аргумента метода {} ", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 }

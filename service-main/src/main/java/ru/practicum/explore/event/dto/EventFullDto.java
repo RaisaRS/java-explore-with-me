@@ -9,6 +9,7 @@ import ru.practicum.explore.category.dto.CategoryDto;
 import ru.practicum.explore.enums.EventState;
 import ru.practicum.explore.location.LocationDto;
 import ru.practicum.explore.user.dto.UserDto;
+import ru.practicum.explore.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +24,7 @@ public class EventFullDto {
     private String description;
     private String annotation;
     private CategoryDto category;
-    private UserDto initiator;
+    private UserShortDto initiator;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
     private Long confirmedRequests;

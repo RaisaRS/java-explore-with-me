@@ -73,7 +73,7 @@ public class EventMapper {
         eventFullDto.setCategory(CategoryMapper.toCategoryDto(event.getCategory()));
         eventFullDto.setConfirmedRequests(CountConfirmedRequests.countConfirmedRequests(event));
         eventFullDto.setCreatedOn(event.getCreatedOn());
-        eventFullDto.setInitiator(UserMapper.toUserDto(event.getInitiator()));
+        eventFullDto.setInitiator(UserMapper.toUserDtoShort(event.getInitiator()));
         eventFullDto.setPublishedOn(event.getPublishedOn());
         eventFullDto.setState(event.getState());
         return eventFullDto;

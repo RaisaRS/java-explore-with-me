@@ -23,7 +23,7 @@ public class Request {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
     @ManyToOne
-    @JoinColumn(name = "requestor_id", nullable = false)
+    @JoinColumn(name = "requester_id", nullable = false)
     private User requester;
     @Column(name = "created")
     private LocalDateTime created;
