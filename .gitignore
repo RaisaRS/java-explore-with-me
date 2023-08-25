@@ -37,3 +37,4 @@ build/
 *.mv.db
 *.trace.db
 db
+.db
