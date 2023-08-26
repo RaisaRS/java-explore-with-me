@@ -290,7 +290,7 @@ public class EventServiceImpl implements EventService {
                         .Sort.by(org.springframework.data.domain
                                 .Sort.Direction.ASC, "id"));
 // тут тест
-        CriteriaAdmin criteria =CriteriaAdmin.builder()
+        CriteriaAdmin criteria = CriteriaAdmin.builder()
                 .users(param.getUsers())
                 .states(param.getStates())
                 .categories(param.getCategories())
