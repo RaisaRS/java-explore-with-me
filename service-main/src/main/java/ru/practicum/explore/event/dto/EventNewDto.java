@@ -1,11 +1,16 @@
 package ru.practicum.explore.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.explore.event.search.Sort;
 import ru.practicum.explore.location.LocationDto;
 import ru.practicum.explore.user.dto.UserDto;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,32 +20,55 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventNewDto {
-    private String text;
-    private Long[] categories;
+    private Long id;
+
+    @NotBlank
+    @Size(min = 3, max = 120)
+    private String title;
+
+    @NotBlank
+    @Size(min = 20, max = 7000)
+    private String description;
+
+    @NotBlank
+    @Size(min = 20, max = 2000)
+    private String annotation;
+
+    @NotNull
     private Long category;
-    private Boolean paid;
+
+    @NotNull
     private LocationDto location;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime rangeStart;
+    @NotNull
+    @Future
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime eventDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime rangeEnd;
+    private Long participantLimit;
 
-    @Builder.Default
-    private Boolean onlyAvailable = false; //подумать как лучше
+    private Boolean requestModeration;
 
-    @Builder.Default
-    private Integer from = 0;
+    private Boolean paid;
 
-    @Builder.Default
-    private Integer size = 10;
+    public Long getParticipantLimit() {
+        if (participantLimit == null) {
+            participantLimit = 0L;
+        }
+        return participantLimit;
+    }
 
-    private Sort sort;
-    private Long views;
+    public Boolean getRequestModeration() {
+        if (requestModeration == null) {
+            requestModeration = true;
+        }
+        return requestModeration;
+    }
 
-    private UserDto initiator;
-    private Long requestId;
-
-    private Long[] users;
+    public Boolean getPaid() {
+        if (paid == null) {
+            paid = false;
+        }
+        return paid;
+    }
 }

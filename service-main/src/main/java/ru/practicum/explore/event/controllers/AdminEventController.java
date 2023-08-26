@@ -6,7 +6,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.enums.EventState;
+import ru.practicum.explore.event.dto.EventDto;
 import ru.practicum.explore.event.dto.EventFullDto;
+import ru.practicum.explore.event.dto.EventShortDto;
 import ru.practicum.explore.event.dto.EventUpdateRequestAdmin;
 import ru.practicum.explore.event.search.AdminSearchCriteria;
 import ru.practicum.explore.event.service.EventService;
@@ -29,15 +31,15 @@ public class AdminEventController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventFullDto> searchEventsByAdmin(@RequestParam(required = false) List<Long> users,
-                                                  @RequestParam(required = false) List<String> states,
-                                                  @RequestParam(required = false) List<Long> categories,
-                                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public List<EventDto> searchEventsByAdmin(@RequestParam(required = false) List<Long> users,
+                                              @RequestParam(required = false) List<String> states,
+                                              @RequestParam(required = false) List<Long> categories,
+                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                   @RequestParam(required = false) LocalDateTime rangeStart,
-                                                  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                   @RequestParam(required = false) LocalDateTime rangeEnd,
-                                                  @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-                                                  @RequestParam(defaultValue = "10") @Positive int size) {
+                                              @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                              @RequestParam(defaultValue = "10") @Positive int size) {
 
 
         List<EventState> statesEnum = null;

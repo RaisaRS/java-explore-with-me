@@ -64,7 +64,7 @@ public class Event {
     private LocalDateTime publishedOn;
 
     @Column(name = "participant_limit")
-    private Integer participantLimit;
+    private Long participantLimit;
 
     @OneToMany
     @JoinColumn(name = "event_id")
@@ -73,8 +73,8 @@ public class Event {
     @Column(name = "request_moderation")
     private Boolean requestModeration;
 
-//    @Column(name = "confirmed_requests")
-//    private long confirmedRequests;
+    @Column(name = "confirmed_requests")
+    private long confirmedRequests;
 
     @Column(name = "paid")
     private Boolean paid;
@@ -83,8 +83,8 @@ public class Event {
     @Column(name = "state")
     private EventState state;
 
-//    @Column(name = "views")
-//    private Long views;
+    @Column(name = "views")
+    private Long views;
 //    @Column
 //    Long request;
 //

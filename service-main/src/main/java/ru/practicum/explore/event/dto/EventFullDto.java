@@ -34,7 +34,7 @@ public class EventFullDto {
     private LocalDateTime createdOn;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
-    private Integer participantLimit;
+    private Long participantLimit;
     private Boolean requestModeration;
     private EventState state;
 }

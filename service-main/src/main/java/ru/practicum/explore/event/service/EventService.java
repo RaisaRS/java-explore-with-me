@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Service
 public interface EventService {
-    EventFullDto saveEvent(Long userId, EventDto eventDto);
+    EventFullDto saveEvent(Long userId, EventNewDto eventNewDto);
 
     EventFullDto getEventByIdPrivate(Long userId, Long eventId);
 
@@ -30,7 +30,7 @@ public interface EventService {
 
     List<RequestDto> getEventRequests(Long userId, Long eventId);
 
-    List<EventFullDto> searchEventsAdmin(AdminSearchCriteria param);
+    List<EventDto> searchEventsAdmin(AdminSearchCriteria param);
 
     Set<EventShortDto> getEventsPublic(PublicSearchCriteria param);
 

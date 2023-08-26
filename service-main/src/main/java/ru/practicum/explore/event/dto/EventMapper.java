@@ -19,17 +19,7 @@ import java.util.stream.Collectors;
 
 @UtilityClass
 public class EventMapper {
-    public static Event toEvent(User user, EventDto dto) {
-//        Event event = new Event();
-//        event.setTitle(dto.getTitle());
-//        event.setDescription(dto.getDescription());
-//        event.setAnnotation(dto.getAnnotation());
-//        event.setInitiator(user);
-//        event.setEventDate(dto.getEventDate());
-//        event.setParticipantLimit(dto.getParticipantLimit());
-//        event.setRequestModeration(dto.getRequestModeration());
-//        event.setPaid(dto.getPaid());
-//        return event;
+    public static Event toEvent(EventDto dto) {
 
         return Event.builder()
                 .annotation(dto.getAnnotation())
@@ -43,6 +33,18 @@ public class EventMapper {
                 .state(EventState.PENDING)
                 .title(dto.getTitle())
                 .build();
+    }
+    public static Event toEvent(User user, EventNewDto dto) {
+        Event event = new Event();
+        event.setTitle(dto.getTitle());
+        event.setDescription(dto.getDescription());
+        event.setAnnotation(dto.getAnnotation());
+        event.setInitiator(user);
+        event.setEventDate(dto.getEventDate());
+        event.setParticipantLimit(dto.getParticipantLimit());
+        event.setRequestModeration(dto.getRequestModeration());
+        event.setPaid(dto.getPaid());
+        return event;
     }
 
     public static EventShortDto toEventShortDto(Event event) {
@@ -93,6 +95,29 @@ public class EventMapper {
         eventFullDto.setPublishedOn(event.getPublishedOn());
         eventFullDto.setState(event.getState());
         return eventFullDto;
+    }
+
+    public static EventDto toEventDto(Event event) {
+//        Float lat = entity.getLocation().getLat();
+//        Float lon = entity.getLocation().getLon();
+        return EventDto.builder()
+                .id(event.getId())
+                .annotation(event.getAnnotation())
+                .category(CategoryMapper.toCategoryDto(event.getCategory()))
+                .confirmedRequests(event.getConfirmedRequests())
+                .createdOn(event.getCreatedOn())
+                .description(event.getDescription())
+                .eventDate(event.getEventDate())
+                .initiator(UserMapper.toUserDto(event.getInitiator()))
+                .location(new LocationDto(event.getLocation().getLat(), event.getLocation().getLon()))
+                .paid(event.getPaid())
+                .participantLimit(event.getParticipantLimit())
+                .publishedOn(event.getPublishedOn())
+                .requestModeration(event.getRequestModeration())
+                .state(event.getState())
+                .title(event.getTitle())
+                .views(event.getViews())
+                .build();
     }
 
     public static List<EventFullDto> listEventFullDto(List<Event> events) {

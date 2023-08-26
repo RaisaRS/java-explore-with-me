@@ -70,8 +70,8 @@ public class RequestServiceImpl implements RequestService {
             created.setStatus(RequestStatus.PENDING);
         }
 
-        long confirmedRequests = eventService.getCountConfirmedRequestsByEvent(event);
-        int limit = event.getParticipantLimit();
+        Long confirmedRequests = eventService.getCountConfirmedRequestsByEvent(event);
+        Long limit = event.getParticipantLimit();
 
         if (limit == 0) {
             created.setStatus(RequestStatus.CONFIRMED);

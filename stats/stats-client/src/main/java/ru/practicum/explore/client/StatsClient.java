@@ -22,15 +22,11 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class StatsClient {
 
-    @Value("${app.stats.url:http://localhost:9090}")
+    @Value("stats-server.url")
     private String url;
-    @Autowired
+
     private final RestTemplate restTemplate;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-//    public StatsClient(RestTemplate restTemplate) {
-//        this.restTemplate = restTemplate;
-//    }
 
 
     public void saveStats(String app, String uri, String ip, LocalDateTime timestamp) {

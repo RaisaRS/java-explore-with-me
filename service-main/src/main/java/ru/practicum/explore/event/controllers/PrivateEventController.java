@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.explore.event.dto.EventDto;
-import ru.practicum.explore.event.dto.EventFullDto;
-import ru.practicum.explore.event.dto.EventShortDto;
-import ru.practicum.explore.event.dto.EventUpdateRequestUser;
+import ru.practicum.explore.event.dto.*;
 import ru.practicum.explore.event.service.EventService;
 import ru.practicum.explore.request.dto.RequestDto;
 import ru.practicum.explore.request.dto.RequestUpdateDto;
@@ -29,10 +26,10 @@ public class PrivateEventController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto addEvent(@PathVariable Long userId,
-                                 @Valid @RequestBody EventDto eventDto) {
-        EventFullDto addedEvent = eventService.saveEvent(userId, eventDto);
+                                    @Valid @RequestBody EventNewDto eventNewDto) {
+        EventFullDto addedEvent = eventService.saveEvent(userId, eventNewDto);
         log.info("Получен POST- запрос /users/{userId}/events на добавление события {} от пользователя: " +
-                " (id): {}", eventDto, userId);
+                " (id): {}", eventNewDto, userId);
         return addedEvent;
     }
 
