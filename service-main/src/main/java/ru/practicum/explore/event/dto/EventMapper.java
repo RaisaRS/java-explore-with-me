@@ -3,7 +3,6 @@ package ru.practicum.explore.event.dto;
 import lombok.experimental.UtilityClass;
 import ru.practicum.explore.category.dto.CategoryMapper;
 import ru.practicum.explore.enums.EventState;
-import ru.practicum.explore.enums.RequestStatus;
 import ru.practicum.explore.event.Event;
 import ru.practicum.explore.location.Location;
 import ru.practicum.explore.location.LocationDto;
