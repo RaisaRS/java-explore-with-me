@@ -7,10 +7,6 @@ import ru.practicum.explore.enums.EventState;
 import ru.practicum.explore.location.LocationDto;
 import ru.practicum.explore.user.dto.UserDto;
 
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter

@@ -34,6 +34,7 @@ public class EventMapper {
                 .title(dto.getTitle())
                 .build();
     }
+
     public static Event toEvent(User user, EventNewDto dto) {
         Event event = new Event();
         event.setTitle(dto.getTitle());

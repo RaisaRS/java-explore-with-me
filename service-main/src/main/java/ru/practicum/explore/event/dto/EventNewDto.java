@@ -2,10 +2,7 @@ package ru.practicum.explore.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-import ru.practicum.explore.event.search.Sort;
 import ru.practicum.explore.location.LocationDto;
-import ru.practicum.explore.user.dto.UserDto;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;

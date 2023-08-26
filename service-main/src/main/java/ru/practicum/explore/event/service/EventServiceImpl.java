@@ -193,7 +193,6 @@ public class EventServiceImpl implements EventService {
         eventFullDto.setViews(viewsFromStats);
         log.info("Событие {} запрошено пользователем", eventFullDto);
         return eventFullDto;
-
     }
 
     @Override
