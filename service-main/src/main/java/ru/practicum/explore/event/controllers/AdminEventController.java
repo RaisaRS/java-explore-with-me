@@ -3,6 +3,8 @@ package ru.practicum.explore.event.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.enums.EventState;
@@ -30,15 +32,15 @@ public class AdminEventController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventDto> searchEventsByAdmin(@RequestParam(required = false) List<Long> users,
-                                              @RequestParam(required = false) List<String> states,
-                                              @RequestParam(required = false) List<Long> categories,
-                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public ResponseEntity<List<EventDto>> searchEventsByAdmin(@RequestParam(required = false) List<Long> users,
+                                                             @RequestParam(required = false) List<String> states,
+                                                             @RequestParam(required = false) List<Long> categories,
+                                                             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                               @RequestParam(required = false) LocalDateTime rangeStart,
-                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                                             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                               @RequestParam(required = false) LocalDateTime rangeEnd,
-                                              @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-                                              @RequestParam(defaultValue = "10") @Positive int size) {
+                                                             @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+                                                             @RequestParam(defaultValue = "10") @Positive int size) {
 
 
         List<EventState> statesEnum = null;
@@ -59,7 +61,7 @@ public class AdminEventController {
                 .size(size)
                 .build();
         log.info("Получен GET-запрос: /admin/events, параметры = {}", param);
-        return eventService.searchEventsAdmin(param);
+        return new ResponseEntity<>(eventService.searchEventsAdmin(param), HttpStatus.OK);
     }
 
     @PatchMapping("/{eventId}")

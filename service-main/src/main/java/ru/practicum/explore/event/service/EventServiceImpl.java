@@ -2,6 +2,7 @@ package ru.practicum.explore.event.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,9 @@ public class EventServiceImpl implements EventService {
 
     private final StatsClient statsClient;
     private final CategoryRepository categoryRepository;
+
+    @Value("${STATS_SERVER_URL:http://localhost:9090/}")
+    private String serviceName;
 
     @Override
     public EventFullDto saveEvent(Long userId, EventNewDto eventNewDto) {
@@ -187,7 +191,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Событие не найдено, id: " + id));
 
         LocalDateTime dateTimeNow = LocalDateTime.now();
-        //statsClient.saveStats("service-main", uri, ip, dateTimeNow);
+        statsClient.saveStats(serviceName, uri, ip, dateTimeNow);
         Long viewsFromStats = getViews(foundEvent);
         EventFullDto eventFullDto = EventMapper.toEventFullDto(foundEvent);
         eventFullDto.setViews(viewsFromStats);
@@ -334,13 +338,17 @@ public class EventServiceImpl implements EventService {
                 org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.ASC,
                         "id"));
 
-        CriteriaUser criteriaUser = CriteriaUser.builder().text(param.getText()).categories(param.getCategories())
-                .rangeEnd(rangeEndTime).rangeStart(rangeStartTime).paid(param.getPaid()).build();
+        CriteriaUser criteriaUser = CriteriaUser.builder()
+                .text(param.getText())
+                .categories(param.getCategories())
+                .rangeEnd(rangeEndTime)
+                .rangeStart(rangeStartTime)
+                .paid(param.getPaid()).build();
 
         List<Event> events1 = eventRepository.findByParamUser(pageable, criteriaUser).toList();
 
         Set<EventShortDto> events = EventMapper.setEventShortDto(events1);
-        log.info("  {}", events.size());
+        log.info("Список событий: {}", events.size());
 
         HttpServletRequest request = param.getRequest();
         HitDto hitDto = HitDto.builder().ip(request.getRemoteAddr()).uri(request

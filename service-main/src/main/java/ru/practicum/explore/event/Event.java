@@ -21,7 +21,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(name = "events", schema = "public")
+@Table(name = "events")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,8 +73,8 @@ public class Event {
     @Column(name = "request_moderation")
     private Boolean requestModeration;
 
-    @Column(name = "confirmed_requests")
-    private long confirmedRequests;
+//    @Column(name = "confirmed_requests")
+//    private long confirmedRequests;
 
     @Column(name = "paid")
     private Boolean paid;

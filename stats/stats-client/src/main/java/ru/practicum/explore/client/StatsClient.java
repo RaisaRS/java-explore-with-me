@@ -21,7 +21,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class StatsClient {
 
-    @Value("stats-server.url")
+    @Value("${STATS_SERVER_URL:http://localhost:9090/}")
     private String url;
 
     private final RestTemplate restTemplate;

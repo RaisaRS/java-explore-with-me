@@ -3,6 +3,8 @@ package ru.practicum.explore.event.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.event.dto.EventFullDto;
@@ -27,7 +29,7 @@ public class PublicEventController {
     private final EventService eventService;
 
     @GetMapping
-    public Set<EventShortDto> getEventsPublic(@RequestParam(required = false) String text,
+    public ResponseEntity<Set<EventShortDto>> getEventsPublic(@RequestParam(required = false) String text,
                                               @RequestParam(required = false) List<Long> categories,
                                               @RequestParam(required = false) Boolean paid,
                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -54,7 +56,7 @@ public class PublicEventController {
                 .size(size)
                 .request(request)
                 .build();
-        return eventService.getEventsPublic(param);
+        return new ResponseEntity<>(eventService.getEventsPublic(param), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
