@@ -2,12 +2,16 @@ package ru.practicum.explore.event.dto;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.explore.category.dto.CategoryMapper;
+import ru.practicum.explore.enums.EventState;
+import ru.practicum.explore.enums.RequestStatus;
 import ru.practicum.explore.event.Event;
+import ru.practicum.explore.location.Location;
 import ru.practicum.explore.location.LocationDto;
 import ru.practicum.explore.user.User;
 import ru.practicum.explore.user.dto.UserMapper;
 import ru.practicum.explore.util.CountConfirmedRequests;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,29 +21,30 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class EventMapper {
     public static Event toEvent(User user, EventDto dto) {
-        Event event = new Event();
-        event.setTitle(dto.getTitle());
-        event.setDescription(dto.getDescription());
-        event.setAnnotation(dto.getAnnotation());
-        event.setInitiator(user);
-        event.setEventDate(dto.getEventDate());
-        event.setParticipantLimit(dto.getParticipantLimit());
-        event.setRequestModeration(dto.getRequestModeration());
-        event.setPaid(dto.getPaid());
-        return event;
+//        Event event = new Event();
+//        event.setTitle(dto.getTitle());
+//        event.setDescription(dto.getDescription());
+//        event.setAnnotation(dto.getAnnotation());
+//        event.setInitiator(user);
+//        event.setEventDate(dto.getEventDate());
+//        event.setParticipantLimit(dto.getParticipantLimit());
+//        event.setRequestModeration(dto.getRequestModeration());
+//        event.setPaid(dto.getPaid());
+//        return event;
+
+        return Event.builder()
+                .annotation(dto.getAnnotation())
+                .createdOn(LocalDateTime.now())
+                .description(dto.getDescription())
+                .eventDate(dto.getEventDate())
+                .location(new Location(dto.getLocation().getLat(), dto.getLocation().getLon()))
+                .paid(dto.getPaid())
+                .participantLimit(dto.getParticipantLimit())
+                .requestModeration(dto.getRequestModeration())
+                .state(EventState.PENDING)
+                .title(dto.getTitle())
+                .build();
     }
-//     return Event.builder()
-//             .annotation(dto.getAnnotation())
-//            .createdOn(LocalDateTime.now())
-//            .description(dto.getDescription())
-//            .date(dto.getEventDate())
-//            .location(new Location(dto.getLocation().getLat(), dto.getLocation().getLon()))
-//            .paid(dto.isPaid())
-//            .participantLimit(dto.getParticipantLimit())
-//            .requestModeration(dto.isRequestModeration())
-//            .state(State.PENDING)
-//                .title(dto.getTitle())
-//            .build();
 
     public static EventShortDto toEventShortDto(Event event) {
         EventShortDto eventShortDto = new EventShortDto();

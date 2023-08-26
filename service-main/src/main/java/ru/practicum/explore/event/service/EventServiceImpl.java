@@ -68,22 +68,24 @@ public class EventServiceImpl implements EventService {
         }
 
 
+        createdEvent.setPublishedOn(eventDto.getEventDate());
         createdEvent.setCategory(category);
         createdEvent.setCreatedOn(LocalDateTime.now());
-        createdEvent.setState(EventState.PENDING);
+        //createdEvent.setState(EventState.PENDING);
         createdEvent.setInitiator(user);
 
         Location location = getLocation(eventDto.getLocation());
 
         createdEvent.setLocation(location);
-        //Long confirmedRequests = CountConfirmedRequests.countConfirmedRequests(createdEvent);
-
-
+        Long confirmedRequests = CountConfirmedRequests.countConfirmedRequests(createdEvent);
         Event afterCreate = eventRepository.save(createdEvent);
-        log.info("Создано событие: {} ", afterCreate);
+        EventFullDto eventFullDto = EventMapper.toEventFullDto(afterCreate);
+        eventFullDto.setViews(0L);
+        eventFullDto.setConfirmedRequests(confirmedRequests);
+        log.info("Создано событие: {} ", eventFullDto);
         //EventFullDto eventFullDto = EventMapper.toEventFullDto(afterCreate);
 
-        return EventMapper.toEventFullDto(afterCreate);
+        return eventFullDto;
     }
 
     private EventFullDto setConfirmedRequests(EventFullDto eventFullDto) {
