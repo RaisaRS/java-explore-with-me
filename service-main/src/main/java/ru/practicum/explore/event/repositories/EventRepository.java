@@ -1,4 +1,4 @@
-package ru.practicum.explore.event.repositoryes;
+package ru.practicum.explore.event.repositories;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

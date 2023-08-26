@@ -13,7 +13,7 @@ import ru.practicum.explore.enums.RequestStatus;
 import ru.practicum.explore.enums.StateActionAdmin;
 import ru.practicum.explore.event.Event;
 import ru.practicum.explore.event.dto.*;
-import ru.practicum.explore.event.repositoryes.EventRepository;
+import ru.practicum.explore.event.repositories.EventRepository;
 import ru.practicum.explore.event.search.AdminSearchCriteria;
 import ru.practicum.explore.event.search.CriteriaAdmin;
 import ru.practicum.explore.event.search.CriteriaUser;

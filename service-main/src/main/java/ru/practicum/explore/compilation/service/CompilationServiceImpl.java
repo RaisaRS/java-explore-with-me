@@ -11,7 +11,7 @@ import ru.practicum.explore.compilation.dto.CompilationMapper;
 import ru.practicum.explore.compilation.dto.CompilationNewDto;
 import ru.practicum.explore.compilation.dto.CompilationUpdateDto;
 import ru.practicum.explore.event.Event;
-import ru.practicum.explore.event.repositoryes.EventRepository;
+import ru.practicum.explore.event.repositories.EventRepository;
 import ru.practicum.explore.exceptions.NotFoundException;
 
 import java.util.Collections;

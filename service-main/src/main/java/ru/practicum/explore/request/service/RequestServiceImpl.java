@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.enums.EventState;
 import ru.practicum.explore.enums.RequestStatus;
 import ru.practicum.explore.event.Event;
-import ru.practicum.explore.event.repositoryes.EventRepository;
+import ru.practicum.explore.event.repositories.EventRepository;
 import ru.practicum.explore.event.service.EventService;
 import ru.practicum.explore.exceptions.ConflictException;
 import ru.practicum.explore.exceptions.NotFoundException;

@@ -1,4 +1,4 @@
-package ru.practicum.explore.event.repositoryes;
+package ru.practicum.explore.event.repositories;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import ru.practicum.explore.category.Category;
 import ru.practicum.explore.event.Event;
-import ru.practicum.explore.event.search.AdminSearchCriteria;
 import ru.practicum.explore.event.search.CriteriaAdmin;
 import ru.practicum.explore.event.search.CriteriaUser;
 import ru.practicum.explore.user.User;
@@ -94,9 +93,9 @@ public class EventCriteriaRepositoryImpl implements EventCriteriaRepository {
             LocalDateTime rangeEnd = criteriaAdmin.getRangeEnd() != null
                     ? criteriaAdmin.getRangeEnd()
                     : LocalDateTime.MAX;
-            predicates.add(criteriaBuilder.between(eventRoot.get("date"), rangeStart, rangeEnd));
+            predicates.add(criteriaBuilder.between(eventRoot.get("eventDate"), rangeStart, rangeEnd));
         } else {
-            predicates.add(criteriaBuilder.between(eventRoot.get("date"), LocalDateTime.now(),
+            predicates.add(criteriaBuilder.between(eventRoot.get("eventDate"), LocalDateTime.now(),
                     LocalDateTime.now().plusYears(100)));
         }
 
@@ -133,9 +132,9 @@ public class EventCriteriaRepositoryImpl implements EventCriteriaRepository {
             LocalDateTime rangeEnd = criteria.getRangeEnd() != null
                     ? criteria.getRangeEnd()
                     : LocalDateTime.MAX;
-            predicates.add(criteriaBuilder.between(eventRoot.get("date"), rangeStart, rangeEnd));
+            predicates.add(criteriaBuilder.between(eventRoot.get("eventDate"), rangeStart, rangeEnd));
         } else {
-            predicates.add(criteriaBuilder.between(eventRoot.get("date"), LocalDateTime.now(),
+            predicates.add(criteriaBuilder.between(eventRoot.get("eventDate"), LocalDateTime.now(),
                     LocalDateTime.now().plusYears(100)));
         }
 
