@@ -1,6 +1,7 @@
 package ru.practicum.explore.event;
 
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import ru.practicum.explore.category.Category;
 import ru.practicum.explore.enums.EventState;
 import ru.practicum.explore.location.Location;
@@ -8,8 +9,11 @@ import ru.practicum.explore.request.Request;
 import ru.practicum.explore.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -21,19 +25,28 @@ import java.util.List;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
+    @Length(min = 3, max = 120)
     @Column(name = "title", nullable = false)
     private String title;
+    @NotBlank
+    @NotNull
+    @Length(min = 20, max = 7000)
     @Column(name = "description", nullable = false)
     private String description;
+    @NotBlank
+    @NotNull
+    @Length(min = 20, max = 2000)
     @Column(name = "annotation", nullable = false)
     private String annotation;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "initiator_id", nullable = false)
     private User initiator;
 
@@ -60,11 +73,35 @@ public class Event {
     @Column(name = "request_moderation")
     private Boolean requestModeration;
 
+//    @Column(name = "confirmed_requests")
+//    private long confirmedRequests;
+
     @Column(name = "paid")
     private Boolean paid;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
     private EventState state;
+
+//    @Column(name = "views")
+//    private Long views;
+//    @Column
+//    Long request;
+//
+//    @ManyToMany(mappedBy = "events")
+//    private Set<Compilation> compilations = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Event)) return false;
+        Event event = (Event) o;
+        return Objects.equals(getEventDate(), event.getEventDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getEventDate());
+    }
 
 }

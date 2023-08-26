@@ -28,6 +28,18 @@ public class EventMapper {
         event.setPaid(dto.getPaid());
         return event;
     }
+//     return Event.builder()
+//             .annotation(dto.getAnnotation())
+//            .createdOn(LocalDateTime.now())
+//            .description(dto.getDescription())
+//            .date(dto.getEventDate())
+//            .location(new Location(dto.getLocation().getLat(), dto.getLocation().getLon()))
+//            .paid(dto.isPaid())
+//            .participantLimit(dto.getParticipantLimit())
+//            .requestModeration(dto.isRequestModeration())
+//            .state(State.PENDING)
+//                .title(dto.getTitle())
+//            .build();
 
     public static EventShortDto toEventShortDto(Event event) {
         EventShortDto eventShortDto = new EventShortDto();

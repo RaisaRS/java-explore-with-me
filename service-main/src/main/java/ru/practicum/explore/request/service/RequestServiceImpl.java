@@ -89,6 +89,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public RequestDto cancelRequest(Long userId, Long requestId) {
         Request request = requestRepository.findByIdAndRequesterId(requestId, userId)
                 .orElseThrow(() -> new NotFoundException(
@@ -99,6 +100,7 @@ public class RequestServiceImpl implements RequestService {
         log.info("Запрос на участие в событии отменён");
         return RequestMapper.toRequestDto(updatesRequest);
     }
+
 
     @Override
     public List<RequestDto> getAllRequestsParticipationInOtherPeoplesEvents(Long userId) {

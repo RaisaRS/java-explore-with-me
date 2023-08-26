@@ -31,13 +31,20 @@ public class RequestMapper {
     }
 
     public static RequestDto toRequestDto(Request request) {
-        return RequestDto.builder()
-                .id(request.getId())
-                .event(request.getEvent().getId())
-                .requester(request.getRequester().getId())
-                .created(request.getCreated())
-                .status(request.getStatus())
-                .build();
+        RequestDto requestDto = new RequestDto();
+        requestDto.setId(request.getId());
+        requestDto.setEvent(request.getEvent().getId());
+        requestDto.setRequester(request.getRequester().getId());
+        requestDto.setCreated(request.getCreated());
+        requestDto.setStatus(request.getStatus());
+        return requestDto;
+//        return RequestDto.builder()
+//                .id(request.getId())
+//                .event(request.getEvent().getId())
+//                .requester(request.getRequester().getId())
+//                .created(request.getCreated())
+//                .status(request.getStatus())
+//                .build();
     }
 
     public static List<RequestDto> listRequestDtos(List<Request> requests) {

@@ -99,7 +99,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEventByIdPrivate(Long userId, Long eventId) {
-        Event event = getEvent(eventId, userId);
+        Event event = getEvent(eventId);
         EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
         eventFullDto.setViews(getViews(event.getId()));
         setConfirmedRequests(eventFullDto);
@@ -109,7 +109,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto updateEventPrivate(Long userId, Long eventId, EventUpdateRequestUser eventUpdateRequestUser) {
-        Event eventForUpdate = getEvent(eventId, userId);
+        Event eventForUpdate = getEvent(eventId);
 
         if (eventForUpdate.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictException("Попытка обновления уже опубликованного события");
@@ -268,7 +268,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<RequestDto> getEventRequests(Long userId, Long eventId) {
-        Event event = getEvent(userId, eventId);
+        Event event = getEvent(eventId);
         List<Request> listRequests = requestRepository.findByEventId(eventId);
         log.info("Список запросов на участие в событии");
         return RequestMapper.listRequestDtos(listRequests);
@@ -281,7 +281,7 @@ public class EventServiceImpl implements EventService {
 
         if (rangeStartTime != null && rangeEndTime != null) {
             if (rangeEndTime.isBefore(rangeStartTime)) {
-                throw new ConflictException("Дата окончания мероприятия должна быть позже даты его начала.");
+                throw new ParameterException("Дата окончания мероприятия должна быть позже даты его начала.");
             }
         }
 
@@ -323,7 +323,7 @@ public class EventServiceImpl implements EventService {
 
         if (rangeStartTime != null && rangeEndTime != null) {
             if (rangeEndTime.isBefore(rangeStartTime)) {
-                throw new ConflictException("Конечная дата должна быть ранее начальной");
+                throw new ParameterException("Конечная дата должна быть ранее начальной");
             }
         }
 
@@ -386,6 +386,13 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> {
             log.error("Событие с id {} не найдено, пользователь: {}", eventId, userId);
             return new NotFoundException(String.format("Событие не найдено: ", eventId));
+        });
+    }
+
+    private Event getEvent(Long eventId) {
+        return eventRepository.findById(eventId).orElseThrow(() -> {
+            log.error("Event id {} not found.", eventId);
+            return new NotFoundException(String.format("Event id %s not found.", eventId));
         });
     }
 
