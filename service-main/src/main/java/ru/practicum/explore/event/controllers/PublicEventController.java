@@ -11,11 +11,13 @@ import ru.practicum.explore.event.dto.EventFullDto;
 import ru.practicum.explore.event.dto.EventShortDto;
 import ru.practicum.explore.event.search.PublicSearchCriteria;
 import ru.practicum.explore.event.service.EventService;
+import ru.practicum.explore.exceptions.ParameterException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
@@ -27,35 +29,72 @@ import java.util.Set;
 public class PublicEventController {
 
     private final EventService eventService;
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping
     public ResponseEntity<Set<EventShortDto>> getEventsPublic(@RequestParam(name = "text", required = false) String text,
-                                                              @RequestParam(name = "categories", required = false) List<Long> categories,
-                                                              @RequestParam(name = "paid", required = false) Boolean paid,
-                                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                              @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
-                                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                              @RequestParam(name = "rangeEnd", required = false) LocalDateTime rangeEnd,
+                                                              @RequestParam(name = "categories", required = false)
+                                                              List<Long> categories,
+                                                              @RequestParam(name = "paid", required = false)
+                                                                  Boolean paid,
+                                                              //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                                              @RequestParam(name = "rangeStart", required = false)
+                                                                  String rangeStart,
+                                                              //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                                              @RequestParam(name = "rangeEnd", required = false)
+                                                                  String rangeEnd,
                                                               @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                               @RequestParam(defaultValue = "EVENT_DATE") String sort,
-                                                              @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
-                                                              @RequestParam(name = "size", defaultValue = "10") @Positive int size,
+                                                              @RequestParam(name = "from", defaultValue = "0")
+                                                                  @PositiveOrZero int from,
+                                                              @RequestParam(name = "size", defaultValue = "10")
+                                                                  @Positive int size,
                                                               HttpServletRequest request) {
         log.info("Получен GET- запрос: /events,  text = {}, categories = {}, paid = {}, rangeStart = {}, " +
                         "rangeEnd = {}, onlyAvailable = {}, sort = {}, from = {}, size = {}", text, categories, paid,
                 rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (rangeStart != null) {
+            start = LocalDateTime.parse(rangeStart, dateTimeFormatter);
+        }
+        if (rangeEnd != null) {
+            end = LocalDateTime.parse(rangeEnd, dateTimeFormatter);
+        }
+
+        if (start != null && end != null) {
+            if (start.isAfter(end)) {
+                log.info("Start date {} is after end date {}.", start, end);
+                throw new ParameterException(String.format("Start date %s is after end date %s.", start, end));
+            }
+        }
+
         PublicSearchCriteria param = PublicSearchCriteria.builder()
                 .text(text)
                 .categories(categories)
                 .paid(paid)
-                .rangeStart(rangeStart)
-                .rangeEnd(rangeEnd)
+                .rangeStart(start)
+                .rangeEnd(end)
                 .onlyAvailable(onlyAvailable)
                 .sort(sort)
                 .from(from)
                 .size(size)
                 .request(request)
                 .build();
+        if(param.getText() == null) {
+            if(param.getCategories() == null) {
+                if(param.getPaid() == null) {
+                            if(param.getOnlyAvailable() == null) {
+                                if(param.getSort() == null) {
+                                        if(param.getRequest() == null) {
+                                                throw new ParameterException("Некорректные параметры");
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return new ResponseEntity<>(eventService.getEventsPublic(param), HttpStatus.OK);
     }
 

@@ -105,6 +105,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto updateEventPrivate(Long userId, Long eventId, EventUpdateRequestUser eventDto) {
 
         Event eventToUpd = eventRepository.findByIdAndInitiatorId(eventId, userId)
@@ -179,6 +180,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto updateEventByAdmin(Long eventId, EventUpdateRequestAdmin eventDto) {
         Event eventToUpdAdmin = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException(String.format("Событие не найдено", eventId)));
@@ -358,6 +360,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public List<EventDto> searchEventsAdmin(AdminSearchCriteria param) {
         LocalDateTime rangeEndTime = param.getRangeEnd();
         LocalDateTime rangeStartTime = param.getRangeStart();
@@ -399,6 +402,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public Set<EventShortDto> getEventsPublic(PublicSearchCriteria param) {
 
         LocalDateTime rangeEndTime = param.getRangeEnd();
@@ -427,8 +431,12 @@ public class EventServiceImpl implements EventService {
         log.info("Список событий: {}", events.size());
 
         HttpServletRequest request = param.getRequest();
-        HitDto hitDto = HitDto.builder().ip(request.getRemoteAddr()).uri(request
-                .getRequestURI()).app("app.stats.url").timestamp(LocalDateTime.now()).build();
+        HitDto hitDto = HitDto.builder()
+                .ip(request.getRemoteAddr())
+                .uri(request.getRequestURI())
+                .app("app.stats.url")
+                .timestamp(LocalDateTime.now())
+                .build();
         statsClient.saveStats(hitDto.getApp(), hitDto.getUri(), hitDto.getIp(), hitDto.getTimestamp());
         log.info(" events.size()= {}  ", events.size());
         return events.stream()
