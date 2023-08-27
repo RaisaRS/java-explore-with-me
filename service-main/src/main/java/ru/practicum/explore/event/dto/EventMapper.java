@@ -78,6 +78,7 @@ public class EventMapper {
         return eventShortDtos;
     }
 
+
     public static EventFullDto toEventFullDto(Event event) {
         EventFullDto eventFullDto = new EventFullDto();
         eventFullDto.setId(event.getId());

@@ -2,6 +2,7 @@ package ru.practicum.explore.category.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.category.Category;
@@ -9,7 +10,6 @@ import ru.practicum.explore.category.CategoryRepository;
 import ru.practicum.explore.category.dto.CategoryDto;
 import ru.practicum.explore.category.dto.CategoryMapper;
 import ru.practicum.explore.exceptions.NotFoundException;
-import ru.practicum.explore.util.CreateRequest;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,16 +44,17 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getCategories(int from, int size) {
-        PageRequest pageRequest = CreateRequest.createRequest(from, size);
-        List<Category> categories = categoryRepository.findAll(pageRequest).getContent();
-        return categories.size() == 0 ? Collections.emptyList() : CategoryMapper.listCategoryDtos(categories);
+        //PageRequest pageRequest = CreateRequest.createRequest(from, size);
+        Pageable pageable = PageRequest.of(from / size, size);
+        List<Category> categories = categoryRepository.findAll(pageable).getContent();
+        return categories.isEmpty() ? Collections.emptyList() : CategoryMapper.listCategoryDtos(categories);
     }
 
     @Override
-    public CategoryDto getCategoryById(Long categoryId) {
-        Category result = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException("Категория события не найдена, id = " + categoryId));
-        return CategoryMapper.toCategoryDto(result);
+    public CategoryDto getCategoryById(Long catId) {
+        Category category = categoryRepository.findById(catId)
+                .orElseThrow(() -> new NotFoundException("Категория события не найдена, id = " + catId));
+        return CategoryMapper.toCategoryDto(category);
     }
 
 }

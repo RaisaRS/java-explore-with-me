@@ -30,17 +30,17 @@ public class PublicEventController {
 
     @GetMapping
     public ResponseEntity<Set<EventShortDto>> getEventsPublic(@RequestParam(required = false) String text,
-                                              @RequestParam(required = false) List<Long> categories,
-                                              @RequestParam(required = false) Boolean paid,
-                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                              @RequestParam(required = false) LocalDateTime rangeStart,
-                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                              @RequestParam(required = false) LocalDateTime rangeEnd,
-                                              @RequestParam(defaultValue = "false") Boolean onlyAvailable,
-                                              @RequestParam(defaultValue = "EVENT_DATE") String sort,
-                                              @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-                                              @RequestParam(defaultValue = "10") @Positive int size,
-                                              HttpServletRequest request) {
+                                                              @RequestParam(required = false) List<Long> categories,
+                                                              @RequestParam(required = false) Boolean paid,
+                                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                                              @RequestParam(required = false) LocalDateTime rangeStart,
+                                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                                              @RequestParam(required = false) LocalDateTime rangeEnd,
+                                                              @RequestParam(defaultValue = "false") Boolean onlyAvailable,
+                                                              @RequestParam(defaultValue = "EVENT_DATE") String sort,
+                                                              @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
+                                                              @RequestParam(name = "size", defaultValue = "10") @Positive int size,
+                                                              HttpServletRequest request) {
         log.info("Получен GET- запрос: /events,  text = {}, categories = {}, paid = {}, rangeStart = {}, " +
                         "rangeEnd = {}, onlyAvailable = {}, sort = {}, from = {}, size = {}", text, categories, paid,
                 rangeStart, rangeEnd, onlyAvailable, sort, from, size);

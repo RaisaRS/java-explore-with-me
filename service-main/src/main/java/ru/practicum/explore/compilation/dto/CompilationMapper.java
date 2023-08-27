@@ -11,22 +11,32 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class CompilationMapper {
 
-    public Compilation toCompilation(CompilationDto compilationDto) {
+    public static Compilation toCompilation(CompilationDto compilationDto) {
         return Compilation.builder()
                 .title(compilationDto.getTitle())
                 .pinned(compilationDto.getPinned())
                 .build();
     }
 
-    public Compilation toCompilation(CompilationNewDto compilationNewDto) {
+    public static Compilation toCompilation(CompilationNewDto compilationNewDto) {
         return Compilation.builder()
                 .title(compilationNewDto.getTitle())
                 .pinned(compilationNewDto.getPinned())
                 .build();
     }
 
-    public CompilationDto toCompilationDto(Compilation compilation) {
+    public static CompilationDto toCompilationDto(Compilation compilation) {
         return new CompilationDto(
+                compilation.getId(),
+                compilation.getTitle(),
+                compilation.getPinned(),
+                compilation.getEvents() == null ? Collections.emptyList() : EventMapper.listEventShortDto(
+                        compilation.getEvents())
+        );
+    }
+
+    public static CompilationWithIdAndPinned toCompWithIdAndPinned(Compilation compilation) {
+        return new CompilationWithIdAndPinned(
                 compilation.getId(),
                 compilation.getTitle(),
                 compilation.getPinned(),

@@ -3,6 +3,7 @@ package ru.practicum.explore.compilation.service;
 import ru.practicum.explore.compilation.dto.CompilationDto;
 import ru.practicum.explore.compilation.dto.CompilationNewDto;
 import ru.practicum.explore.compilation.dto.CompilationUpdateDto;
+import ru.practicum.explore.compilation.dto.CompilationWithIdAndPinned;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface CompilationService {
 
     void deleteCompilation(Long compilationId);
 
-    List<CompilationDto> getCompilations(Boolean pinned, int from, int size);
+    List<CompilationWithIdAndPinned> getCompilations(int from, int size);
 
     CompilationDto getCompilationsById(Long compilationId);
 }

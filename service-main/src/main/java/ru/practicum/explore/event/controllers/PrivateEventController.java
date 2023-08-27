@@ -38,8 +38,8 @@ public class PrivateEventController {
 
     @GetMapping
     public List<EventShortDto> getEventsByInitiator(@PathVariable Long userId,
-                                                    @RequestParam(required = false, defaultValue = "0") int from,
-                                                    @RequestParam(required = false, defaultValue = "10") int size) {
+                                                    @RequestParam(name = "from", defaultValue = "0") int from,
+                                                    @RequestParam(name = "size", defaultValue = "10") int size) {
         List<EventShortDto> events = eventService.getAllEventsByInitiatorPrivate(userId, from, size);
         log.info("Получен GET- запрос  /users/{userId}/events?from={from}&size={size}, " +
                         "Просмотр списка событий от пользователя (id): {} с параметрами пагинации from: {} size: {}",

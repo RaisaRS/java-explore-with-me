@@ -1,20 +1,19 @@
 package ru.practicum.explore.compilation.dto;
 
 import lombok.*;
+import ru.practicum.explore.event.dto.EventShortDto;
 
-import javax.validation.constraints.Size;
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CompilationUpdateDto {
-
-    //@NotBlank
-    @Size(max = 50, min = 1)
+public class CompilationWithIdAndPinned {
+    private Long id;
     private String title;
     private Boolean pinned;
-    private List<Long> events;
+    private List<EventShortDto> events;
 }

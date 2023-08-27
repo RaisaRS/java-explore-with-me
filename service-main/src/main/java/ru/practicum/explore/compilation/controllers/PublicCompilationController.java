@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.compilation.dto.CompilationDto;
+import ru.practicum.explore.compilation.dto.CompilationWithIdAndPinned;
 import ru.practicum.explore.compilation.service.CompilationService;
 
 import java.util.List;
@@ -19,12 +20,11 @@ public class PublicCompilationController {
     private final CompilationService compilationService;
 
     @GetMapping
-    public List<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned,
-                                                @RequestParam(required = false, defaultValue = "0") int from,
-                                                @RequestParam(required = false, defaultValue = "10") int size) {
+    public List<CompilationWithIdAndPinned> getCompilations(@RequestParam(name = "from", defaultValue = "0") int from,
+                                                            @RequestParam(name = "size", defaultValue = "10") int size) {
         log.info("Получен GET-запрос: /compilations?pinned={pinned}&from={from}&size={size} (Public). " +
-                "Просмотр подборки событий с параметрами: pinned {}, from: {}, size: {}.", pinned, from, size);
-        return compilationService.getCompilations(pinned, from, size);
+                "Просмотр подборки событий с параметрами:  from: {}, size: {}.", from, size);
+        return compilationService.getCompilations(from, size);
     }
 
     @GetMapping("/{compId}")

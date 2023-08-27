@@ -33,14 +33,14 @@ public class AdminEventController {
 
     @GetMapping
     public ResponseEntity<List<EventDto>> searchEventsByAdmin(@RequestParam(required = false) List<Long> users,
-                                                             @RequestParam(required = false) List<String> states,
-                                                             @RequestParam(required = false) List<Long> categories,
-                                                             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                              @RequestParam(required = false) LocalDateTime rangeStart,
-                                                             @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                              @RequestParam(required = false) LocalDateTime rangeEnd,
-                                                             @RequestParam(defaultValue = "0") @PositiveOrZero int from,
-                                                             @RequestParam(defaultValue = "10") @Positive int size) {
+                                                              @RequestParam(required = false) List<String> states,
+                                                              @RequestParam(required = false) List<Long> categories,
+                                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                                              @RequestParam(required = false) LocalDateTime rangeStart,
+                                                              @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+                                                              @RequestParam(required = false) LocalDateTime rangeEnd,
+                                                              @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
+                                                              @RequestParam(name = "size", defaultValue = "10") @Positive int size) {
 
 
         List<EventState> statesEnum = null;

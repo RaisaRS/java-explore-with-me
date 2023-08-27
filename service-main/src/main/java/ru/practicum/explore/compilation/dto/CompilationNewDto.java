@@ -14,9 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class CompilationNewDto {
-    private List<Long> events;
+
     @NotBlank//message
     @Size(max = 50, min = 1)//message
     private String title;
     private Boolean pinned;
+    private List<Long> events;
 }
