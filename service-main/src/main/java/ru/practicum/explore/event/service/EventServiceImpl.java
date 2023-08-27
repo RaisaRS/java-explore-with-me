@@ -444,6 +444,7 @@ public class EventServiceImpl implements EventService {
                         .setViews(this.getViews(eventDtos.getId())))
                 .collect(Collectors.toSet());
     }
+    //nen
 
     @Override
     public long getCountConfirmedRequestsByEvent(Event event) {

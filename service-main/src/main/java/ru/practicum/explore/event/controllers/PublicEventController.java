@@ -2,7 +2,6 @@ package ru.practicum.explore.event.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -36,19 +35,19 @@ public class PublicEventController {
                                                               @RequestParam(name = "categories", required = false)
                                                               List<Long> categories,
                                                               @RequestParam(name = "paid", required = false)
-                                                                  Boolean paid,
+                                                              Boolean paid,
                                                               //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                               @RequestParam(name = "rangeStart", required = false)
-                                                                  String rangeStart,
+                                                              String rangeStart,
                                                               //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                               @RequestParam(name = "rangeEnd", required = false)
-                                                                  String rangeEnd,
+                                                              String rangeEnd,
                                                               @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                               @RequestParam(defaultValue = "EVENT_DATE") String sort,
                                                               @RequestParam(name = "from", defaultValue = "0")
-                                                                  @PositiveOrZero int from,
+                                                              @PositiveOrZero int from,
                                                               @RequestParam(name = "size", defaultValue = "10")
-                                                                  @Positive int size,
+                                                              @Positive int size,
                                                               HttpServletRequest request) {
         log.info("Получен GET- запрос: /events,  text = {}, categories = {}, paid = {}, rangeStart = {}, " +
                         "rangeEnd = {}, onlyAvailable = {}, sort = {}, from = {}, size = {}", text, categories, paid,
@@ -82,13 +81,13 @@ public class PublicEventController {
                 .size(size)
                 .request(request)
                 .build();
-        if(param.getText() == null) {
-            if(param.getCategories() == null) {
-                if(param.getPaid() == null) {
-                            if(param.getOnlyAvailable() == null) {
-                                if(param.getSort() == null) {
-                                        if(param.getRequest() == null) {
-                                                throw new ParameterException("Некорректные параметры");
+        if (param.getText() == null) {
+            if (param.getCategories() == null) {
+                if (param.getPaid() == null) {
+                    if (param.getOnlyAvailable() == null) {
+                        if (param.getSort() == null) {
+                            if (param.getRequest() == null) {
+                                throw new ParameterException("Некорректные параметры");
                             }
                         }
                     }
