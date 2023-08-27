@@ -15,24 +15,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class EventDto {
-    Long id;
-    String annotation;
-    CategoryDto category;
-    long confirmedRequests;
-    LocalDateTime createdOn;
-    String description;
+    private Long id;
+    private String annotation;
+    private CategoryDto category;
+    private Long confirmedRequests;
+    private LocalDateTime createdOn;
+    private String description;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime eventDate;
-    UserDto initiator;
-    LocationDto location;
-    Boolean paid;
-    Long participantLimit;
+    private LocalDateTime eventDate;
+    private UserDto initiator;
+    private LocationDto location;
+    private Boolean paid;
+    private Long participantLimit;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime publishedOn;
-    Boolean requestModeration;
-    EventState state;
-    String title;
-    Long views;
+    private LocalDateTime publishedOn;
+    private Boolean requestModeration;
+    private EventState state;
+    private String title;
+    private Long views;
 //    private Long id;
 //    @NotBlank
 //    @Size(min = 3, max = 120)

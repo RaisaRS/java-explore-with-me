@@ -74,7 +74,7 @@ public class EventServiceImpl implements EventService {
 
         List<Location> check = locationRepository.findByLatAndLon(eventNewDto.getLocation().getLat(),
                 eventNewDto.getLocation().getLon());
-        if (check.size() == 0) {
+        if (check.isEmpty()) {
             Location lc = new Location();
             lc.setLat(eventNewDto.getLocation().getLat());
             lc.setLon(eventNewDto.getLocation().getLon());
@@ -116,7 +116,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto updateEventPrivate(Long userId, Long eventId, EventUpdateRequestUser eventUpdateRequestUser) {
-        Event eventForUpdate = getEvent(eventId);
+        Event eventForUpdate = getEvent(eventId, userId);
 
         if (eventForUpdate.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictException("Попытка обновления уже опубликованного события");
@@ -143,7 +143,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto updateEventByAdmin(Long eventId, EventUpdateRequestAdmin eventUpdateRequestAdmin) {
         Event eventToUpdateAdmin = eventRepository.findById(eventId).orElseThrow(() ->
-                new NotFoundException("Попытка обновления уже опубликованного события " +
+                new ConflictException("Попытка обновления уже опубликованного события " +
                         "от имени администратора, id события: " + eventId));
 
         switch (eventToUpdateAdmin.getState()) {
@@ -475,9 +475,9 @@ public class EventServiceImpl implements EventService {
         }
 
         if (eventUpdateDto.getLocation() != null) {
-            var loc = locationRepository.findByLatAndLon(eventUpdateDto.getLocation().getLat(),
+            List<Location> loc = locationRepository.findByLatAndLon(eventUpdateDto.getLocation().getLat(),
                     eventUpdateDto.getLocation().getLon());
-            if (loc.size() == 0) {
+            if (loc.isEmpty()) {
                 Location lc = new Location();
                 lc.setLat(eventUpdateDto.getLocation().getLat());
                 lc.setLon(eventUpdateDto.getLocation().getLon());
@@ -506,7 +506,9 @@ public class EventServiceImpl implements EventService {
         if (eventUpdateDto.getTitle() != null) {
             eventForUpdate.setTitle(eventUpdateDto.getTitle());
             log.debug("Название обновлено до: {}", eventUpdateDto.getTitle());
-        }
+        } else {
+        throw new ConflictException("Изменить можно только отмененное событие или событие в режиме ожидания");
+    }
     }
 
     private static PageRequest createRequest(int from, int size) {
