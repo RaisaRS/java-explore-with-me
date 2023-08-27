@@ -64,7 +64,7 @@ public class EventServiceImpl implements EventService {
 
         LocalDateTime minStartDate = LocalDateTime.now().plusHours(1);
         if (eventNewDto.getEventDate().isBefore(minStartDate)) {
-            throw new ConflictException(String.format("Event date must be not earlier than %s hours later", 1));
+            throw new ConflictException(String.format("Дата события не может быть ранее даты добавления на 1 час", 1));
         }
 
         Event createdEvent = EventMapper.toEvent(user, eventNewDto);
@@ -91,11 +91,15 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEventByIdPrivate(Long userId, Long eventId) {
-        Event event = getEvent(eventId, userId);
+
+        Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
+                .orElseThrow(() -> new NotFoundException(String.format(
+                        "Событие с идентификатором id=%s and и пользователь с идентификатором id=%s не найдены",
+                        eventId, userId)));
+
         EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
         eventFullDto.setViews(getViews(event));
-        //setConfirmedRequests(eventFullDto);
-        log.info("Cобытие {} запрошено по id пользователя {} , администратором", eventFullDto, userId);
+        log.info("Просмотр события по идентификатору пользователем, который его добавил");
         return eventFullDto;
     }
 
@@ -104,16 +108,17 @@ public class EventServiceImpl implements EventService {
 
         Event eventToUpd = eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotFoundException(String.format(
-                        "Event with id=%s and added by user id=%s was not found", eventId, userId)));
+                        "Событие с идентификатором id=%s и пользователем его добавившим id=%s не найдено",
+                        eventId, userId)));
 
         if (eventToUpd.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictException("Updated event must be not published");
+            throw new ConflictException("Нельзя обновить опубликованное событие");
         }
 
         if (eventDto.getEventDate() != null) {
             LocalDateTime minStartDate = LocalDateTime.now().plusHours(1);
             if (eventDto.getEventDate().isBefore(minStartDate)) {
-                throw new ConflictException(String.format("Event date must be not earlier than %s hours later", 1));
+                throw new ConflictException(String.format("Дата события не может быть ранее даты добавления на 1 час", 1));
             }
             eventToUpd.setEventDate(eventDto.getEventDate());
         }
@@ -155,16 +160,16 @@ public class EventServiceImpl implements EventService {
         if (eventDto.getStateAction() != null) {
             if (eventDto.getStateAction().equals(StateActionUser.SEND_TO_REVIEW)) {
                 if (!eventToUpd.getState().equals(EventState.CANCELED)) {
-                    throw new ConflictException("Cannot send to review if state is not canceled");
+                    throw new ConflictException("Невозможно отправить на проверку, если состояние не отменено");
                 }
                 eventToUpd.setState(EventState.PENDING);
             } else if (eventDto.getStateAction().equals(StateActionUser.CANCEL_REVIEW)) {
                 if (!eventToUpd.getState().equals(EventState.PENDING)) {
-                    throw new ConflictException("Cannot cancel event if it is not state pending");
+                    throw new ConflictException("Невозможно отменить событие, если оно не находится в состоянии ожидания");
                 }
                 eventToUpd.setState(EventState.CANCELED);
             } else {
-                throw new ConflictException("Incorrect state action");
+                throw new ConflictException("Некорректный статус");
             }
         }
         Event after = eventRepository.save(eventToUpd);
@@ -180,7 +185,8 @@ public class EventServiceImpl implements EventService {
         if (eventDto.getEventDate() != null) {
             var minStartDate = LocalDateTime.now().plusHours(1);
             if (eventDto.getEventDate().isBefore(minStartDate)) {
-                throw new ConflictException(String.format("Событие не может быть ранее, чем за два часа до публикации", 1));
+                throw new ConflictException(String.format("Событие не может быть ранее, " +
+                        "чем за два часа до публикации", 1));
             }
             eventDto.setEventDate(eventDto.getEventDate());
         }
@@ -197,7 +203,8 @@ public class EventServiceImpl implements EventService {
             eventToUpdAdmin.setDescription(eventDto.getDescription());
         }
         if (eventDto.getLocation() != null) {
-            List<Location> loc = locationRepository.findByLatAndLon(eventDto.getLocation().getLat(), eventDto.getLocation().getLon());
+            List<Location> loc = locationRepository.findByLatAndLon(eventDto.getLocation().getLat(),
+                    eventDto.getLocation().getLon());
             if (loc.isEmpty()) {
                 Location lc = new Location();
                 lc.setLat(eventDto.getLocation().getLat());
@@ -246,21 +253,22 @@ public class EventServiceImpl implements EventService {
             }
         }
         Event after = eventRepository.save(eventToUpdAdmin);
+        log.info("Событие обновлено администратором");
         return EventMapper.toEventFullDto(after);
 
     }
 
     @Override
     public EventFullDto getEventByIdPublic(Long id, String uri, String ip) {
-        Event foundEvent = eventRepository.findByIdAndState(id, EventState.PUBLISHED)
+        Event event = eventRepository.findByIdAndState(id, EventState.PUBLISHED)
                 .orElseThrow(() -> new NotFoundException("Событие не найдено, id: " + id));
 
         LocalDateTime dateTimeNow = LocalDateTime.now();
         statsClient.saveStats(serviceName, uri, ip, dateTimeNow);
-        Long viewsFromStats = getViews(foundEvent);
-        EventFullDto eventFullDto = EventMapper.toEventFullDto(foundEvent);
+        Long viewsFromStats = getViews(event);
+        EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
         eventFullDto.setViews(viewsFromStats);
-        log.info("Событие {} запрошено пользователем", eventFullDto);
+        log.info("Информация о запрошенном событии: {} ", eventFullDto);
         return eventFullDto;
     }
 

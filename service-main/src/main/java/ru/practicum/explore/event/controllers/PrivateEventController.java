@@ -49,10 +49,10 @@ public class PrivateEventController {
 
     @GetMapping("/{eventId}")
     public EventFullDto getEventByIdPrivate(@PathVariable Long userId, @PathVariable Long eventId) {
-        EventFullDto eventById = eventService.getEventByIdPrivate(userId, eventId);
+        //EventFullDto eventById =
         log.info("Получен GET- запрос: /users/{userId}/events/{eventId}. Просмотр события (id): {} " +
                 "от пользователя: (id): {}", eventId, userId);
-        return eventById;
+        return eventService.getEventByIdPrivate(userId, eventId);
     }
 
     @PatchMapping("/{eventId}")
