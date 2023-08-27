@@ -29,13 +29,13 @@ public class PublicEventController {
     private final EventService eventService;
 
     @GetMapping
-    public ResponseEntity<Set<EventShortDto>> getEventsPublic(@RequestParam(required = false) String text,
-                                                              @RequestParam(required = false) List<Long> categories,
-                                                              @RequestParam(required = false) Boolean paid,
+    public ResponseEntity<Set<EventShortDto>> getEventsPublic(@RequestParam(name = "text", required = false) String text,
+                                                              @RequestParam(name = "categories", required = false) List<Long> categories,
+                                                              @RequestParam(name = "paid", required = false) Boolean paid,
                                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                              @RequestParam(required = false) LocalDateTime rangeStart,
+                                                              @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
                                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                              @RequestParam(required = false) LocalDateTime rangeEnd,
+                                                              @RequestParam(name = "rangeEnd", required = false) LocalDateTime rangeEnd,
                                                               @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                               @RequestParam(defaultValue = "EVENT_DATE") String sort,
                                                               @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,

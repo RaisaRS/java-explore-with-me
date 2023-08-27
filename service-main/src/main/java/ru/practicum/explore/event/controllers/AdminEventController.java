@@ -32,13 +32,13 @@ public class AdminEventController {
     private final EventService eventService;
 
     @GetMapping
-    public ResponseEntity<List<EventDto>> searchEventsByAdmin(@RequestParam(required = false) List<Long> users,
-                                                              @RequestParam(required = false) List<String> states,
-                                                              @RequestParam(required = false) List<Long> categories,
+    public ResponseEntity<List<EventDto>> searchEventsByAdmin(@RequestParam(name = "users", required = false) List<Long> users,
+                                                              @RequestParam(name = "states", required = false) List<String> states,
+                                                              @RequestParam(name = "categories", required = false) List<Long> categories,
                                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                              @RequestParam(required = false) LocalDateTime rangeStart,
+                                                              @RequestParam(name = "rangeStart", required = false) LocalDateTime rangeStart,
                                                               @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-                                                              @RequestParam(required = false) LocalDateTime rangeEnd,
+                                                              @RequestParam(name = "rangeEnd", required = false) LocalDateTime rangeEnd,
                                                               @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
                                                               @RequestParam(name = "size", defaultValue = "10") @Positive int size) {
 

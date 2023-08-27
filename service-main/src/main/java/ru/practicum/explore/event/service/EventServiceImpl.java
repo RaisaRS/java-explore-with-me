@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.category.Category;
 import ru.practicum.explore.category.CategoryRepository;
 import ru.practicum.explore.client.StatsClient;
@@ -252,9 +253,10 @@ public class EventServiceImpl implements EventService {
                 throw new ConflictException("Некорректный статус публикации");
             }
         }
-        Event after = eventRepository.save(eventToUpdAdmin);
+        EventFullDto eventFullDto = EventMapper.toEventFullDto(eventRepository.save(eventToUpdAdmin));
+        setConfirmedRequests(eventFullDto);
         log.info("Событие обновлено администратором");
-        return EventMapper.toEventFullDto(after);
+        return eventFullDto;
 
     }
 
@@ -273,6 +275,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public RequestUpdateResultDto updateStatusRequestsForEvent(Long userId, Long eventId,
                                                                RequestUpdateDto requestUpdateDto) {
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
