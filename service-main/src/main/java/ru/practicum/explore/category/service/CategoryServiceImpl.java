@@ -45,16 +45,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteCategory(Long catId) {
+    public CategoryDto deleteCategory(Long catId) {
 
         Category category = categoryRepository.findById(catId).orElseThrow(() ->
-                new NotFoundException("Пользователь с id = '" + catId + "' не найден"));
-        CategoryDto categoryDto = CategoryMapper.toCategoryDto(category);
-        if (eventRepository.findByCategoryId(catId).isEmpty()) {
+                new NotFoundException("Категория с id = '" + catId + "' не найдена"));
+        if (eventRepository.findByCategoryId(category.getId()).size() > 0) {
             throw new ConflictException("Удаление категории с привязанными событиями");
         }
-        categoryRepository.deleteById(catId);
+        CategoryDto categoryDto = CategoryMapper.toCategoryDto(category);
         log.info("Удалена категория по идентификатору {} ", catId);
+        categoryRepository.deleteById(categoryDto.getId());
+        return categoryDto;
     }
 
     @Override

@@ -56,7 +56,7 @@ public class EventServiceImpl implements EventService {
     private final StatsClient statsClient;
     private final CategoryRepository categoryRepository;
 
-    @Value("${STATS_SERVER_URL:http://localhost:9090/}")
+    @Value("${server.url}")
     private String serviceName;
 
     @Override

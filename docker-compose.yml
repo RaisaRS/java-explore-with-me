@@ -10,7 +10,7 @@ services:
       - explore-db
       - stats-server
     environment:
-      - STATS_SERVER_URL=http://server:9090
+      - STATS_SERVER_URL=http://stats-server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://explore-db:5432/main-db
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root

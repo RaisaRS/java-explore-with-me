@@ -3,6 +3,7 @@ package ru.practicum.explore.category.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.category.dto.CategoryDto;
@@ -35,9 +36,9 @@ public class AdminCategoryController {
     }
 
     @DeleteMapping("/{catId}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable Long catId) {
+    public ResponseEntity<CategoryDto> deleteCategory(@PathVariable Long catId) {
         log.info("Получен DELETE - запрос: /admin/categories{catId} (Admin). Удалена категория (id): {}", catId);
-        categoryService.deleteCategory(catId);
+       return new ResponseEntity<>(categoryService.deleteCategory(catId), HttpStatus.valueOf(204));
     }
+
 }

@@ -81,27 +81,15 @@ public class PublicEventController {
                 .size(size)
                 .request(request)
                 .build();
-        if (param.getText() == null) {
-            if (param.getCategories() == null) {
-                if (param.getPaid() == null) {
-                    if (param.getOnlyAvailable() == null) {
-                        if (param.getSort() == null) {
-                            if (param.getRequest() == null) {
-                                throw new ParameterException("Некорректные параметры");
-                            }
-                        }
-                    }
-                }
-            }
-        }
         return new ResponseEntity<>(eventService.getEventsPublic(param), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public EventFullDto getEventByIdPublic(@PathVariable Long id, HttpServletRequest request) {
+    @GetMapping("/events/{id}")
+    public ResponseEntity<EventFullDto> getEventByIdPublic(@PathVariable Long id, HttpServletRequest request) {
         log.info("Получен GET- запрос (получить событие по идентификатору):  /events/{id} от пользователя. " +
                         "Просмотр события (id): {}, от client ip: {},  path: {}",
                 id, request.getRemoteAddr(), request.getRequestURI());
-        return eventService.getEventByIdPublic(id, request.getRequestURI(), request.getRemoteAddr());
+        return new ResponseEntity<>(eventService.getEventByIdPublic(id, request.getRequestURI(),
+                request.getRemoteAddr()), HttpStatus.OK);
     }
 }

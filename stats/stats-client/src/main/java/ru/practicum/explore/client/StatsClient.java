@@ -21,7 +21,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class StatsClient {
 
-    @Value("${STATS_SERVER_URL:http://localhost:9090/}")
+    @Value("${server.url}")
     private String url;
 
     private final RestTemplate restTemplate;
@@ -30,7 +30,7 @@ public class StatsClient {
 
     public void saveStats(String app, String uri, String ip, LocalDateTime timestamp) {
         HitDto body = new HitDto(app, uri, ip, timestamp);
-        restTemplate.postForEntity("/hit", body, Void.class);
+        restTemplate.postForEntity(url + "/hit", body, Void.class);
     }
 
     public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
@@ -45,7 +45,7 @@ public class StatsClient {
                     "unique", unique);
 
             StatsDto[] response = restTemplate.getForObject(
-                    "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
+                    url + "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
                     StatsDto[].class,
                     parameters);
 
@@ -57,7 +57,7 @@ public class StatsClient {
                 "unique", unique);
 
         StatsDto[] response = restTemplate.getForObject(
-                "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
+                url + "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
                 StatsDto[].class,
                 parameters);
 
