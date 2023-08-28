@@ -27,7 +27,6 @@ public class StatsClient {
     private final RestTemplate restTemplate;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-
     public void saveStats(String app, String uri, String ip, LocalDateTime timestamp) {
         HitDto body = new HitDto(app, uri, ip, timestamp);
         restTemplate.postForEntity(url + "/hit", body, Void.class);
@@ -76,4 +75,5 @@ public class StatsClient {
         String timeString = time.format(formatter);
         return URLEncoder.encode(timeString, StandardCharsets.UTF_8);
     }
+
 }

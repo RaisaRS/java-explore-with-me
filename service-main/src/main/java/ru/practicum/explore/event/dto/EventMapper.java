@@ -127,4 +127,5 @@ public class EventMapper {
                 .map(EventMapper::toEventFullDto)
                 .collect(Collectors.toList());
     }
+
 }

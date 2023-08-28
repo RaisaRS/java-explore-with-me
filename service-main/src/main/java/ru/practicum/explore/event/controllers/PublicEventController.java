@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.explore.event.dto.EventFullDto;
+import ru.practicum.explore.event.dto.EventDto;
 import ru.practicum.explore.event.dto.EventShortDto;
 import ru.practicum.explore.event.search.PublicSearchCriteria;
 import ru.practicum.explore.event.service.EventService;
@@ -85,11 +85,9 @@ public class PublicEventController {
     }
 
     @GetMapping("/events/{id}")
-    public ResponseEntity<EventFullDto> getEventByIdPublic(@PathVariable Long id, HttpServletRequest request) {
-        log.info("Получен GET- запрос (получить событие по идентификатору):  /events/{id} от пользователя. " +
-                        "Просмотр события (id): {}, от client ip: {},  path: {}",
-                id, request.getRemoteAddr(), request.getRequestURI());
-        return new ResponseEntity<>(eventService.getEventByIdPublic(id, request.getRequestURI(),
-                request.getRemoteAddr()), HttpStatus.OK);
+    public ResponseEntity<EventDto> getEventByIdPublic(@PathVariable Long id, HttpServletRequest request) {
+        log.info("Получен GET- запрос (получить событие по идентификатору):  /events/{id}  (id): {}, запрос: {}",
+                id, request);
+        return new ResponseEntity<>(eventService.getEventByIdPublic(id, request), HttpStatus.OK);
     }
 }

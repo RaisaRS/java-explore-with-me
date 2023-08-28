@@ -9,6 +9,7 @@ import ru.practicum.explore.request.dto.RequestDto;
 import ru.practicum.explore.request.dto.RequestUpdateDto;
 import ru.practicum.explore.request.dto.RequestUpdateResultDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public interface EventService {
 
     EventFullDto updateEventByAdmin(Long eventId, EventUpdateRequestAdmin eventUpdateRequestAdmin);
 
-    EventFullDto getEventByIdPublic(Long id, String uri, String ip);
+    EventDto getEventByIdPublic(Long eventId, HttpServletRequest request);
 
     RequestUpdateResultDto updateStatusRequestsForEvent(Long userId, Long eventId, RequestUpdateDto requestUpdateDto);
 

@@ -73,8 +73,6 @@ public class Event {
     @Column(name = "request_moderation")
     private Boolean requestModeration;
 
-//    @Column(name = "confirmed_requests")
-//    private long confirmedRequests;
 
     @Column(name = "paid")
     private Boolean paid;
@@ -85,11 +83,6 @@ public class Event {
 
     @Column(name = "views")
     private Long views;
-//    @Column
-//    Long request;
-//
-//    @ManyToMany(mappedBy = "events")
-//    private Set<Compilation> compilations = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

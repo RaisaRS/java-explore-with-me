@@ -43,6 +43,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ru.practicum.explore.enums.EventState.PUBLISHED;
+import static ru.practicum.explore.enums.StateActionAdmin.PUBLISH_EVENT;
+
 
 @RequiredArgsConstructor
 @Slf4j
@@ -58,6 +61,8 @@ public class EventServiceImpl implements EventService {
 
     @Value("${server.url}")
     private String serviceName;
+    private final HashSet<String> requestHashSet = new HashSet<>();
+    private final HashMap<Long, HashSet<String>> httpServletRequests = new HashMap<>();
 
     @Override
     public EventFullDto saveEvent(Long userId, EventNewDto eventNewDto) {
@@ -113,7 +118,7 @@ public class EventServiceImpl implements EventService {
                         "Событие с идентификатором id=%s и пользователем его добавившим id=%s не найдено",
                         eventId, userId)));
 
-        if (eventToUpd.getState().equals(EventState.PUBLISHED)) {
+        if (eventToUpd.getState().equals(PUBLISHED)) {
             throw new ConflictException("Нельзя обновить опубликованное событие");
         }
 
@@ -231,7 +236,7 @@ public class EventServiceImpl implements EventService {
             eventToUpdAdmin.setTitle(eventDto.getTitle());
         }
         if (eventDto.getStateAction() != null) {
-            if (eventDto.getStateAction().equals(StateActionAdmin.PUBLISH_EVENT)) {
+            if (eventDto.getStateAction().equals(PUBLISH_EVENT)) {
                 if (!eventToUpdAdmin.getState().equals(EventState.PENDING)) {
                     throw new ConflictException("Не удается опубликовать событие, поскольку оно не находится " +
                             "в состоянии ожидания");
@@ -243,7 +248,7 @@ public class EventServiceImpl implements EventService {
                             String.format("Дата события должна быть не ранее, чем за час до публикации",
                                     1));
                 }
-                eventToUpdAdmin.setState(EventState.PUBLISHED);
+                eventToUpdAdmin.setState(PUBLISHED);
                 eventToUpdAdmin.setPublishedOn(datePublish);
             } else if (eventDto.getStateAction().equals(StateActionAdmin.REJECT_EVENT)) {
                 if (!eventToUpdAdmin.getState().equals(EventState.PENDING)) {
@@ -263,17 +268,34 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto getEventByIdPublic(Long id, String uri, String ip) {
-        Event event = eventRepository.findByIdAndState(id, EventState.PUBLISHED)
-                .orElseThrow(() -> new NotFoundException("Событие не найдено, id: " + id));
+    public EventDto getEventByIdPublic(Long eventId, HttpServletRequest servletRequest) {
 
-        LocalDateTime dateTimeNow = LocalDateTime.now();
-        statsClient.saveStats(serviceName, uri, ip, dateTimeNow);
-        Long viewsFromStats = getViews(event);
-        EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
-        eventFullDto.setViews(viewsFromStats);
-        log.info("Информация о запрошенном событии: {} ", eventFullDto);
-        return eventFullDto;
+        requestHashSet.add(servletRequest.getRemoteAddr());
+        httpServletRequests.put(eventId, requestHashSet);
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Событие с id = '" + eventId + " не найдено"));
+
+
+        if (event.getState() != PUBLISHED) {
+            throw new NotFoundException("Попытка получения информации о событии по публичному эндпоинту без публикации");
+        }
+
+        HitDto hitDto = HitDto.builder()
+                .ip(servletRequest.getRemoteAddr())
+                .uri(servletRequest.getRequestURI())
+                .app(serviceName)
+                .timestamp(LocalDateTime.now())
+                .build();
+        statsClient.saveStats(hitDto.getApp(), hitDto.getUri(), hitDto.getIp(), hitDto.getTimestamp());
+
+        event.setViews((long) httpServletRequests.get(eventId).size());
+        Event eventWithView = eventRepository.save(event);
+        EventDto eventDto = EventMapper.toEventDto(eventWithView);
+
+        log.info("Подробная информация о событи по id: {} ", eventId);
+
+        return eventDto;
     }
 
     @Override
@@ -367,7 +389,8 @@ public class EventServiceImpl implements EventService {
 
         if (rangeStartTime != null && rangeEndTime != null) {
             if (rangeEndTime.isBefore(rangeStartTime)) {
-                throw new ParameterException("Дата окончания мероприятия должна быть позже даты его начала.");
+                throw new ParameterException(
+                        "Дата окончания мероприятия должна быть позже даты его начала.");
             }
         }
 
@@ -393,13 +416,16 @@ public class EventServiceImpl implements EventService {
                 .map(EventMapper::toEventDto)
                 .collect(Collectors.toList());
 
-
         log.info("events.size() {}", events.size());
         return eventDtos.stream()
                 .peek(eventDto -> eventDto.setViews(this.getViews(eventDto.getId())))
+                .peek(eventDto -> eventDto.setConfirmedRequests(this.getCountConfirmedRequestsByEvent(
+                        events.stream().filter(event -> (event.getId() == eventDto.getId())).findFirst()
+                                .get())))
                 .collect(Collectors.toList());
 
     }
+
 
     @Override
     @Transactional
@@ -501,26 +527,6 @@ public class EventServiceImpl implements EventService {
         });
     }
 
-//    private Location getLocation(LocationDto locationDto) {
-//        log.info("Проверка местоположения: {}.", locationDto);
-//
-//        Float latitude = locationDto.getLat();
-//        Float longitude = locationDto.getLon();
-//
-//        Location savedLocation = findOrCreateLocation(latitude, longitude);
-//        log.info("Сохраненное местоположение: {}.", savedLocation);
-//        return savedLocation;
-//    }
-//
-//    private Location findOrCreateLocation(Float latitude, Float longitude) {
-//        List<Location> existingLocation = locationRepository.findByLatAndLon(latitude, longitude);
-//        return existingLocation.orElseGet(() -> createLocation(latitude, longitude));
-//    }
-//
-//    private Location createLocation(Float latitude, Float longitude) {
-//        Location newLocation = new Location(latitude, longitude);
-//        return locationRepository.save(newLocation);
-//    }
 
     private EventDto setConfirmedRequests(EventDto eventDto) {
         eventDto.setConfirmedRequests(requestRepository.countByEventIdAndConfirmed(eventDto.getId()));
