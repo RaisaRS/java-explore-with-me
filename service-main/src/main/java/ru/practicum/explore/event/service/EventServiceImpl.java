@@ -186,7 +186,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto updateEventByAdmin(Long eventId, EventUpdateRequestAdmin eventDto) {
+    public EventDto updateEventByAdmin(Long eventId, EventUpdateRequestAdmin eventDto) {
         Event eventToUpdAdmin = eventRepository.findById(eventId).orElseThrow(() ->
                 new NotFoundException(String.format("Событие не найдено", eventId)));
 
@@ -245,8 +245,7 @@ public class EventServiceImpl implements EventService {
                 LocalDateTime minStartDate = datePublish.plusHours(1);
                 if (eventToUpdAdmin.getEventDate().isBefore(minStartDate)) {
                     throw new ConflictException(
-                            String.format("Дата события должна быть не ранее, чем за час до публикации",
-                                    1));
+                            String.format("Дата события должна быть не ранее, чем за час до публикации", 1));
                 }
                 eventToUpdAdmin.setState(PUBLISHED);
                 eventToUpdAdmin.setPublishedOn(datePublish);
@@ -260,10 +259,10 @@ public class EventServiceImpl implements EventService {
                 throw new ConflictException("Некорректный статус публикации");
             }
         }
-        EventFullDto eventFullDto = EventMapper.toEventFullDto(eventRepository.save(eventToUpdAdmin));
-        setConfirmedRequests(eventFullDto);
+        EventDto dto = EventMapper.toEventDto(eventRepository.save(eventToUpdAdmin));
+        setConfirmedRequests(dto);
         log.info("Событие обновлено администратором");
-        return eventFullDto;
+        return dto;
 
     }
 
@@ -278,9 +277,9 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Событие с id = '" + eventId + " не найдено"));
 
 
-//        if (event.getState() != PUBLISHED) {
-//            throw new NotFoundException("Попытка получения информации о событии по публичному эндпоинту без публикации");
-//        }
+        if (event.getState() != PUBLISHED) {
+            throw new NotFoundException("Попытка получения информации о событии по публичному эндпоинту без публикации");
+        }
 
         HitDto hitDto = HitDto.builder()
                 .ip(servletRequest.getRemoteAddr())

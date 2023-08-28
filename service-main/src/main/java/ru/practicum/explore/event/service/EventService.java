@@ -21,7 +21,7 @@ public interface EventService {
 
     EventFullDto updateEventPrivate(Long userId, Long eventId, EventUpdateRequestUser eventUpdateRequestUser);
 
-    EventFullDto updateEventByAdmin(Long eventId, EventUpdateRequestAdmin eventUpdateRequestAdmin);
+    EventDto updateEventByAdmin(Long eventId, EventUpdateRequestAdmin eventUpdateRequestAdmin);
 
     EventDto getEventByIdPublic(Long eventId, HttpServletRequest request);
 

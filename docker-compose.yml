@@ -6,6 +6,7 @@ services:
     container_name: service-main-container
     ports:
       - "8080:8080"
+      - "5005:5005"
     depends_on:
       - explore-db
       - stats-server
@@ -31,6 +32,7 @@ services:
     container_name: stats-server-container
     ports:
       - "9090:9090"
+      - "5006:5006"
     depends_on:
       - stats-db
     environment:
