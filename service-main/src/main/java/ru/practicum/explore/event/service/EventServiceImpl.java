@@ -268,6 +268,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventDto getEventByIdPublic(Long eventId, HttpServletRequest servletRequest) {
 
         requestHashSet.add(servletRequest.getRemoteAddr());
@@ -277,9 +278,9 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Событие с id = '" + eventId + " не найдено"));
 
 
-        if (event.getState() != PUBLISHED) {
-            throw new NotFoundException("Попытка получения информации о событии по публичному эндпоинту без публикации");
-        }
+//        if (event.getState() != PUBLISHED) {
+//            throw new NotFoundException("Попытка получения информации о событии по публичному эндпоинту без публикации");
+//        }
 
         HitDto hitDto = HitDto.builder()
                 .ip(servletRequest.getRemoteAddr())
@@ -417,13 +418,29 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
 
         log.info("events.size() {}", events.size());
-        return eventDtos.stream()
+//        return eventDtos.stream()
+//                .peek(eventDto -> eventDto.setViews(this.getViews(eventDto.getId())))
+//                .peek(eventDto -> eventDto.setConfirmedRequests(this.getCountConfirmedRequestsByEvent(
+//                        events.stream().filter(event -> (event.getId() == eventDto.getId())).findFirst()
+//                                .get())))
+//                .collect(Collectors.toList());
+        List<EventDto> modifiedEventDtos = eventDtos.stream()
                 .peek(eventDto -> eventDto.setViews(this.getViews(eventDto.getId())))
-                .peek(eventDto -> eventDto.setConfirmedRequests(this.getCountConfirmedRequestsByEvent(
-                        events.stream().filter(event -> (event.getId() == eventDto.getId())).findFirst()
-                                .get())))
                 .collect(Collectors.toList());
+        List<EventDto> updatedEventDtos = modifiedEventDtos.stream()
+                .map(eventDto -> {
+                    Event event = events.stream()
+                            .filter(e -> e.getId() == eventDto.getId())
+                            .findFirst()
+                            .orElseThrow(NoSuchElementException::new);
+                    Long confirmedRequests = this.getCountConfirmedRequestsByEvent(event);
+                    eventDto.setConfirmedRequests(confirmedRequests);
+                    return eventDto;
+                })
+                .collect(Collectors.toList());
+        List<EventDto> resultEventDtos = new ArrayList<>(updatedEventDtos);
 
+        return resultEventDtos;
     }
 
 
