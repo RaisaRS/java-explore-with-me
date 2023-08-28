@@ -430,7 +430,7 @@ public class EventServiceImpl implements EventService {
         List<EventDto> updatedEventDtos = modifiedEventDtos.stream()
                 .map(eventDto -> {
                     Event event = events.stream()
-                            .filter(e -> e.getId() == eventDto.getId())
+                            .filter(e -> e.getId().equals(eventDto.getId()))
                             .findFirst()
                             .orElseThrow(NoSuchElementException::new);
                     Long confirmedRequests = this.getCountConfirmedRequestsByEvent(event);
