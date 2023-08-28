@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.enums.EventState;
 import ru.practicum.explore.event.dto.EventDto;
-import ru.practicum.explore.event.dto.EventFullDto;
 import ru.practicum.explore.event.dto.EventUpdateRequestAdmin;
 import ru.practicum.explore.event.search.AdminSearchCriteria;
 import ru.practicum.explore.event.service.EventService;
@@ -66,7 +65,7 @@ public class AdminEventController {
 
     @PatchMapping("/{eventId}")
     public EventDto updateEventByAdmin(@PathVariable Long eventId,
-                                           @Valid @RequestBody EventUpdateRequestAdmin eventUpdateRequestAdmin) {
+                                       @Valid @RequestBody EventUpdateRequestAdmin eventUpdateRequestAdmin) {
         log.info("Получен PATCH- запрос: /admin/events/{eventId}] (Admin). Обновление события (id): {} обновлено (dto): {}",
                 eventId, eventUpdateRequestAdmin);
         return eventService.updateEventByAdmin(eventId, eventUpdateRequestAdmin);
