@@ -34,8 +34,8 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public List<StatsDto> getStats(@RequestParam String start,
-                                   @RequestParam String end,
+    public List<StatsDto> getStats(@RequestParam(name = "start", required = false) String start,
+                                   @RequestParam(name = "end", required = false) String end,
                                    @RequestParam(required = false) List<String> uris,
                                    @RequestParam(required = false, defaultValue = "false") Boolean unique) {
 
