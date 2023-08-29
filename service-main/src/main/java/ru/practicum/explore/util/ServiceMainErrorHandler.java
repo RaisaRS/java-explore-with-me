@@ -44,6 +44,13 @@ public class ServiceMainErrorHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgumentException(final MethodArgumentTypeMismatchException e) {
+        log.error("Аттеншн: Используется несоответствующий тип аргумента метода {} ", e.getMessage());
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleIllegalArgumentException(final IllegalArgumentException e) {
         log.error("Аттеншн: Используется несоответствующий тип аргумента метода {} ", e.getMessage());
         return new ErrorResponse(e.getMessage());
