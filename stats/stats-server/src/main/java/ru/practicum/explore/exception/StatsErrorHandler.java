@@ -18,6 +18,11 @@ public class StatsErrorHandler {
     }
 
 
-//        Error processing request
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgumentException(final IllegalArgumentException e) {
+        log.error("Аттеншн: Используется несоответствующий тип аргумента метода {} ", e.getMessage());
+        return new ErrorResponse(e.getMessage());
+    }
 
 }
