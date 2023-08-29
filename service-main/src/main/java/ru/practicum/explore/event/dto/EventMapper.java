@@ -100,8 +100,6 @@ public class EventMapper {
     }
 
     public static EventDto toEventDto(Event event) {
-//        Float lat = entity.getLocation().getLat();
-//        Float lon = entity.getLocation().getLon();
         return EventDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())

@@ -38,13 +38,6 @@ public class RequestMapper {
         requestDto.setCreated(request.getCreated());
         requestDto.setStatus(request.getStatus());
         return requestDto;
-//        return RequestDto.builder()
-//                .id(request.getId())
-//                .event(request.getEvent().getId())
-//                .requester(request.getRequester().getId())
-//                .created(request.getCreated())
-//                .status(request.getStatus())
-//                .build();
     }
 
     public static List<RequestDto> listRequestDtos(List<Request> requests) {

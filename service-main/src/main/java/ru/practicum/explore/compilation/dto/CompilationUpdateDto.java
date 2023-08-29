@@ -12,7 +12,6 @@ import java.util.List;
 @Builder
 public class CompilationUpdateDto {
 
-    //@NotBlank
     @Size(max = 50, min = 1)
     private String title;
     private Boolean pinned;

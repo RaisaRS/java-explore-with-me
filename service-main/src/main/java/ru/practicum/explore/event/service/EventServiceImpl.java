@@ -486,7 +486,6 @@ public class EventServiceImpl implements EventService {
                         .setViews(this.getViews(eventDtos.getId())))
                 .collect(Collectors.toSet());
     }
-    //nen
 
     @Override
     public long getCountConfirmedRequestsByEvent(Event event) {
@@ -545,11 +544,6 @@ public class EventServiceImpl implements EventService {
 
 
     private EventDto setConfirmedRequests(EventDto eventDto) {
-        eventDto.setConfirmedRequests(requestRepository.countByEventIdAndConfirmed(eventDto.getId()));
-        return eventDto;
-    }
-
-    private EventFullDto setConfirmedRequests(EventFullDto eventDto) {
         eventDto.setConfirmedRequests(requestRepository.countByEventIdAndConfirmed(eventDto.getId()));
         return eventDto;
     }

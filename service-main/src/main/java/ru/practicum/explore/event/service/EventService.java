@@ -36,9 +36,4 @@ public interface EventService {
     Set<EventShortDto> getEventsPublic(PublicSearchCriteria param);
 
     long getCountConfirmedRequestsByEvent(Event event);
-//    Long getViews(Long eventId);
-//    //void setViewsForListShortDto(List<? extends EventShortDto> events);
-//    void setViewsForListShortDto(List<EventShortDto> events);
-
-
 }

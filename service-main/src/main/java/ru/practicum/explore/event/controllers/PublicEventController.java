@@ -36,10 +36,8 @@ public class PublicEventController {
                                                               List<Long> categories,
                                                               @RequestParam(name = "paid", required = false)
                                                               Boolean paid,
-                                                              //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                               @RequestParam(name = "rangeStart", required = false)
                                                               String rangeStart,
-                                                              //@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
                                                               @RequestParam(name = "rangeEnd", required = false)
                                                               String rangeEnd,
                                                               @RequestParam(defaultValue = "false") Boolean onlyAvailable,
@@ -84,7 +82,7 @@ public class PublicEventController {
         return new ResponseEntity<>(eventService.getEventsPublic(param), HttpStatus.OK);
     }
 
-    @GetMapping("/events/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<EventDto> getEventByIdPublic(@PathVariable Long id, HttpServletRequest request) {
         log.info("Получен GET- запрос (получить событие по идентификатору):  /events/{id}  (id): {}, запрос: {}",
                 id, request);

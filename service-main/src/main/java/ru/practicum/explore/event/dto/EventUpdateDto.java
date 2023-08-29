@@ -38,10 +38,4 @@ public class EventUpdateDto {
     private Boolean requestModeration;
 
     private Boolean paid;
-
-    // private EventStateAction stateAction;
-//    SEND_TO_REVIEW,
-//    CANCEL_REVIEW,
-//    PUBLISH_EVENT,
-//    REJECT_EVENT
 }
