@@ -205,7 +205,6 @@ public class EventServiceImpl implements EventService {
         }
         if (eventDto.getCategory() != null) {
             Category category = getCategory(eventDto.getCategory());
-            //categoryRepository.findById(eventDto.getCategory());
 
             eventToUpdAdmin.setCategory(category);
         }
@@ -556,74 +555,6 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Категория события не найдена, id = " + categoryId));
         return category;
 
-    }
-
-    private Request getRequest(Long requestId) {
-        return requestRepository.findById(requestId).orElseThrow(() -> {
-            log.info("Запрос на участие, с id {} не найден.", requestId);
-            return new NotFoundException("Запрос на участие не найден, id: " + requestId);
-        });
-    }
-
-    private void updateEventFields(Event eventForUpdate, EventUpdateDto eventUpdateDto) {
-        if (eventUpdateDto.getAnnotation() != null) {
-            eventForUpdate.setAnnotation(eventUpdateDto.getAnnotation());
-            log.debug("Аннотация обновлена до: {}", eventUpdateDto.getAnnotation());
-        }
-
-        if (eventUpdateDto.getCategory() != null
-                && !eventUpdateDto.getCategory().equals(eventForUpdate.getCategory().getId())) {
-            Category category = getCategory(eventUpdateDto.getCategory());
-            eventForUpdate.setCategory(category);
-            log.debug("Категория обновлена до: {}", category);
-        }
-
-        if (eventUpdateDto.getDescription() != null) {
-            eventForUpdate.setDescription(eventUpdateDto.getDescription());
-            log.debug("Описание обновлено до: {}", eventUpdateDto.getDescription());
-        }
-
-        if (eventUpdateDto.getEventDate() != null) {
-            eventForUpdate.setEventDate(eventUpdateDto.getEventDate());
-            log.debug("Дата события обновлена до: {}", eventUpdateDto.getEventDate());
-        }
-
-        if (eventUpdateDto.getLocation() != null) {
-            List<Location> loc = locationRepository.findByLatAndLon(eventUpdateDto.getLocation().getLat(),
-                    eventUpdateDto.getLocation().getLon());
-            if (loc.isEmpty()) {
-                Location lc = new Location();
-                lc.setLat(eventUpdateDto.getLocation().getLat());
-                lc.setLon(eventUpdateDto.getLocation().getLon());
-                var after = locationRepository.save(lc);
-                eventForUpdate.setLocation(after);
-            } else {
-                eventForUpdate.setLocation(loc.get(0));
-            }
-        }
-
-        if (eventUpdateDto.getPaid() != null) {
-            eventForUpdate.setPaid(eventUpdateDto.getPaid());
-            log.debug("Оплата участия в событии обновлена: {}", eventUpdateDto.getPaid());
-        }
-
-        if (eventUpdateDto.getParticipantLimit() != null) {
-            eventForUpdate.setParticipantLimit(eventUpdateDto.getParticipantLimit());
-            log.debug("Лимит участников обновлен до: {}", eventUpdateDto.getParticipantLimit());
-        }
-
-        if (eventUpdateDto.getRequestModeration() != null) {
-            eventForUpdate.setRequestModeration(eventUpdateDto.getRequestModeration());
-            log.debug("Модерация запроса обновлена до: {}", eventUpdateDto.getRequestModeration());
-        }
-
-        if (eventUpdateDto.getTitle() != null) {
-            eventForUpdate.setTitle(eventUpdateDto.getTitle());
-            log.debug("Название обновлено до: {}", eventUpdateDto.getTitle());
-//        } else {
-//        throw new ConflictException("Изменить можно только отмененное событие или событие в режиме ожидания");
-//    }
-        }
     }
 
     private static PageRequest createRequest(int from, int size) {
