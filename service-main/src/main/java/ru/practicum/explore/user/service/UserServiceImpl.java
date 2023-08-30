@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.user.User;
 import ru.practicum.explore.user.UserRepository;
 import ru.practicum.explore.user.dto.UserDto;
@@ -21,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public UserDto addUser(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
         User saveUser = userRepository.save(user);
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public List<UserDto> getUsers(List<Long> ids, int from, int size) {
         PageRequest pageRequest = CreateRequest.createRequest(from, size);
         List<User> listUserDtos = ids != null
@@ -39,6 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long userId) {
         log.info("Удалён пользователь (id): {}", userId);
         userRepository.deleteById(userId);

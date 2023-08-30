@@ -10,14 +10,14 @@ import java.util.List;
 @Data
 @Builder
 public class PublicSearchCriteria {
-    String text;
-    List<Long> categories;
-    Boolean paid;
-    LocalDateTime rangeStart;
-    LocalDateTime rangeEnd;
-    Boolean onlyAvailable;
-    String sort;
-    int from;
-    int size;
-    HttpServletRequest request;
+    private String text;
+    private List<Long> categories;
+    private Boolean paid;
+    private LocalDateTime rangeStart;
+    private LocalDateTime rangeEnd;
+    private Boolean onlyAvailable;
+    private String sort;
+    private int from;
+    private int size;
+    private HttpServletRequest request;
 }

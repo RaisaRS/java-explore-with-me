@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @UtilityClass
 public class EventMapper {
-    public static Event toEvent(EventDto dto) {
+    public Event toEvent(EventDto dto) {
 
         return Event.builder()
                 .annotation(dto.getAnnotation())
@@ -35,7 +35,7 @@ public class EventMapper {
                 .build();
     }
 
-    public static Event toEvent(User user, EventNewDto dto) {
+    public Event toEvent(User user, EventNewDto dto) {
         Event event = new Event();
         event.setTitle(dto.getTitle());
         event.setDescription(dto.getDescription());
@@ -48,7 +48,7 @@ public class EventMapper {
         return event;
     }
 
-    public static EventShortDto toEventShortDto(Event event) {
+    public EventShortDto toEventShortDto(Event event) {
         EventShortDto eventShortDto = new EventShortDto();
         eventShortDto.setId(event.getId());
         eventShortDto.setTitle(event.getTitle());
@@ -62,7 +62,7 @@ public class EventMapper {
         return eventShortDto;
     }
 
-    public static Set<EventShortDto> setEventShortDto(List<Event> events) {
+    public Set<EventShortDto> setEventShortDto(List<Event> events) {
         Set<EventShortDto> evShortDtos = new HashSet<>();
         for (Event e : events) {
             evShortDtos.add(toEventShortDto(e));
@@ -70,7 +70,7 @@ public class EventMapper {
         return evShortDtos;
     }
 
-    public static List<EventShortDto> listEventShortDto(List<Event> events) {
+    public List<EventShortDto> listEventShortDto(List<Event> events) {
         List<EventShortDto> eventShortDtos = new ArrayList<>();
         for (Event e : events) {
             eventShortDtos.add(toEventShortDto(e));
@@ -79,7 +79,7 @@ public class EventMapper {
     }
 
 
-    public static EventFullDto toEventFullDto(Event event) {
+    public EventFullDto toEventFullDto(Event event) {
         EventFullDto eventFullDto = new EventFullDto();
         eventFullDto.setId(event.getId());
         eventFullDto.setTitle(event.getTitle());
@@ -99,12 +99,11 @@ public class EventMapper {
         return eventFullDto;
     }
 
-    public static EventDto toEventDto(Event event) {
+    public EventDto toEventDto(Event event) {
         return EventDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
-                //.confirmedRequests(event.getConfirmedRequests())
                 .createdOn(event.getCreatedOn())
                 .description(event.getDescription())
                 .eventDate(event.getEventDate())
@@ -120,7 +119,7 @@ public class EventMapper {
                 .build();
     }
 
-    public static List<EventFullDto> listEventFullDto(List<Event> events) {
+    public List<EventFullDto> listEventFullDto(List<Event> events) {
         return events.stream()
                 .map(EventMapper::toEventFullDto)
                 .collect(Collectors.toList());

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @UtilityClass
 public class RequestMapper {
-    public static Request toRequestFromUserIdAndEventId(Long userId, Long eventId) {
+    public Request toRequestFromUserIdAndEventId(Long userId, Long eventId) {
         return Request.builder()
                 .event(Event.builder()
                         .id(eventId)
@@ -22,7 +22,7 @@ public class RequestMapper {
                 .build();
     }
 
-    public static Request toRequestFromUserAndEvent(User user, Event event) {
+    public Request toRequestFromUserAndEvent(User user, Event event) {
         Request request = new Request();
         request.setEvent(event);
         request.setRequester(user);
@@ -30,7 +30,7 @@ public class RequestMapper {
         return request;
     }
 
-    public static RequestDto toRequestDto(Request request) {
+    public RequestDto toRequestDto(Request request) {
         RequestDto requestDto = new RequestDto();
         requestDto.setId(request.getId());
         requestDto.setEvent(request.getEvent().getId());
@@ -40,7 +40,7 @@ public class RequestMapper {
         return requestDto;
     }
 
-    public static List<RequestDto> listRequestDtos(List<Request> requests) {
+    public List<RequestDto> listRequestDtos(List<Request> requests) {
         return requests.stream()
                 .map(RequestMapper::toRequestDto)
                 .collect(Collectors.toList());

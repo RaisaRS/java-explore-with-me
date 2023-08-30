@@ -65,6 +65,7 @@ public class EventServiceImpl implements EventService {
     private final HashMap<Long, HashSet<String>> httpServletRequests = new HashMap<>();
 
     @Override
+    @Transactional
     public EventFullDto saveEvent(Long userId, EventNewDto eventNewDto) {
         User user = getUser(userId);
 
@@ -96,6 +97,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto getEventByIdPrivate(Long userId, Long eventId) {
 
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
@@ -374,6 +376,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public List<RequestDto> getEventRequests(Long userId, Long eventId) {
         Event event = getEvent(eventId);
         List<Request> listRequests = requestRepository.findByEventId(eventId);
@@ -398,7 +401,7 @@ public class EventServiceImpl implements EventService {
                 org.springframework.data.domain
                         .Sort.by(org.springframework.data.domain
                                 .Sort.Direction.ASC, "id"));
-// тут тест
+
         CriteriaAdmin criteria = CriteriaAdmin.builder()
                 .users(param.getUsers())
                 .states(param.getStates())
@@ -417,12 +420,6 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
 
         log.info("events.size() {}", events.size());
-//        return eventDtos.stream()
-//                .peek(eventDto -> eventDto.setViews(this.getViews(eventDto.getId())))
-//                .peek(eventDto -> eventDto.setConfirmedRequests(this.getCountConfirmedRequestsByEvent(
-//                        events.stream().filter(event -> (event.getId() == eventDto.getId())).findFirst()
-//                                .get())))
-//                .collect(Collectors.toList());
         List<EventDto> modifiedEventDtos = eventDtos.stream()
                 .peek(eventDto -> eventDto.setViews(this.getViews(eventDto.getId())))
                 .collect(Collectors.toList());

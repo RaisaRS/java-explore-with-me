@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.compilation.Compilation;
 import ru.practicum.explore.compilation.CompilationRepository;
 import ru.practicum.explore.compilation.dto.*;
@@ -22,6 +23,7 @@ public class CompilationServiceImpl implements CompilationService {
     private final EventRepository eventRepository;
 
     @Override
+    @Transactional
     public CompilationDto addCompilation(CompilationNewDto compilationDto) {
         Compilation compilation = CompilationMapper.toCompilation(compilationDto);
 
@@ -38,6 +40,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto updateCompilation(Long compId, CompilationUpdateDto compilationDto) {
         Compilation updatedCompilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException(
@@ -59,6 +62,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public void deleteCompilation(Long compilationId) {
         compilationRepository.deleteById(compilationId);
     }
@@ -73,6 +77,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public CompilationDto getCompilationsById(Long compilationId) {
         Compilation compilation = compilationRepository.findById(compilationId).orElseThrow(() ->
                 new NotFoundException("Подборка событий не найдена, id = " + compilationId));

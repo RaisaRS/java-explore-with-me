@@ -49,7 +49,6 @@ public class PrivateEventController {
 
     @GetMapping("/{eventId}")
     public EventFullDto getEventByIdPrivate(@PathVariable Long userId, @PathVariable Long eventId) {
-        //EventFullDto eventById =
         log.info("Получен GET- запрос: /users/{userId}/events/{eventId}. Просмотр события (id): {} " +
                 "от пользователя: (id): {}", eventId, userId);
         return eventService.getEventByIdPrivate(userId, eventId);
