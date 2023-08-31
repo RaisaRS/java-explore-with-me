@@ -6,11 +6,12 @@ services:
     container_name: service-main-container
     ports:
       - "8080:8080"
+      - "5005:5005"
     depends_on:
       - explore-db
       - stats-server
     environment:
-      - STATS_SERVER_URL=http://server:9090
+      - STATS_SERVER_URL=http://stats-server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://explore-db:5432/main-db
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
@@ -31,6 +32,7 @@ services:
     container_name: stats-server-container
     ports:
       - "9090:9090"
+      - "5006:5006"
     depends_on:
       - stats-db
     environment:

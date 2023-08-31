@@ -1,5 +1,7 @@
 package ru.practicum.explore.client;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -16,18 +18,18 @@ import java.util.Map;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class StatsClient {
-    private final RestTemplate rest;
+
+    @Value("${server.url}")
+    private String url;
+
+    private final RestTemplate restTemplate;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public StatsClient(RestTemplate rest) {
-        this.rest = rest;
-    }
-
-
-    public void saveStats(String app, String uri, String ip, LocalDateTime time) {
-        HitDto body = new HitDto(app, uri, ip, time);
-        rest.postForEntity("/hit", body, Void.class);
+    public void saveStats(String app, String uri, String ip, LocalDateTime timestamp) {
+        HitDto body = new HitDto(app, uri, ip, timestamp);
+        restTemplate.postForEntity(url + "/hit", body, Void.class);
     }
 
     public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
@@ -41,8 +43,8 @@ public class StatsClient {
                     "uris", urisString,
                     "unique", unique);
 
-            StatsDto[] response = rest.getForObject(
-                    "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
+            StatsDto[] response = restTemplate.getForObject(
+                    url + "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
                     StatsDto[].class,
                     parameters);
 
@@ -53,8 +55,8 @@ public class StatsClient {
                 "end", encodeDateTime(end),
                 "unique", unique);
 
-        StatsDto[] response = rest.getForObject(
-                "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
+        StatsDto[] response = restTemplate.getForObject(
+                url + "/stats?start={start}&end={end}&uris={uris}&unique={unique}",
                 StatsDto[].class,
                 parameters);
 
@@ -73,4 +75,5 @@ public class StatsClient {
         String timeString = time.format(formatter);
         return URLEncoder.encode(timeString, StandardCharsets.UTF_8);
     }
+
 }

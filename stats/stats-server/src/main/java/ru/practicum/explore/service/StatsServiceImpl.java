@@ -8,6 +8,8 @@ import ru.practicum.explore.repository.StatsRepository;
 import ru.practicum.explore.useDto.dto.HitDto;
 import ru.practicum.explore.useDto.dto.StatsDto;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -36,21 +38,30 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<StatsDto> getStats(String start, String end, List<String> uris, boolean unique) {
 
-        LocalDateTime startTime = LocalDateTime.parse(start, dateTimeFormatter);
-        LocalDateTime endTime = LocalDateTime.parse(end, dateTimeFormatter);
-        if (startTime.isAfter(endTime)) {
-            log.warn("Дата начала {} должна быть ранее даты окончания {}.", startTime, endTime);
-            throw new IllegalArgumentException("Дата начала {} должна быть ранее даты окончания {}."
-                    + startTime + endTime);
-        }
+        try {
+            LocalDateTime startTime = LocalDateTime.parse(
+                    java.net.URLDecoder.decode(start, StandardCharsets.UTF_8.name()),
+                    dateTimeFormatter);
+            LocalDateTime endTime = LocalDateTime.parse(
+                    java.net.URLDecoder.decode(end, StandardCharsets.UTF_8.name()), dateTimeFormatter);
 
-        List<StatsDto> hits;
-        if (unique) {
-            hits = getUniqueHits(startTime, endTime, uris);
-        } else {
-            hits = getAllHits(startTime, endTime, uris);
+            if (startTime.isAfter(endTime)) {
+                log.warn("Дата начала {} должна быть ранее даты окончания {}.", startTime, endTime);
+                throw new IllegalArgumentException("Дата начала {} должна быть ранее даты окончания {}."
+                        + startTime + endTime);
+            }
+
+            List<StatsDto> hits;
+            if (unique) {
+                hits = getUniqueHits(startTime, endTime, uris);
+            } else {
+                hits = getAllHits(startTime, endTime, uris);
+            }
+            return hits;
+        } catch (UnsupportedEncodingException e) {
+            log.error(e.getLocalizedMessage());
+            return List.of();
         }
-        return hits;
     }
 
 
