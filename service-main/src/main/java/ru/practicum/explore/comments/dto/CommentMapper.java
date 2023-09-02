@@ -29,7 +29,7 @@ public class CommentMapper {
                 .build();
     }
 
-    public List<CommentDto> listToCommentDto (List<Comment> comments) {
+    public List<CommentDto> listToCommentDto(List<Comment> comments) {
         if (comments == null) {
             return null;
         }

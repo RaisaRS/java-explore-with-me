@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByEventId(Long eventId);
+
     @Query(value = "select c from  Comment c join fetch c.event e where e.state =?1 and e.id=?2 and c.id=?3")
     Optional<Comment> findByIdForEvent(String state, Long eventId, Long commentId);
 

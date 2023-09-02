@@ -28,6 +28,7 @@ public class CommentServiceImpl implements CommentService {
     private final EventRepository eventRepository;
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
+
     @Override
     public CommentShortDto saveComment(Long userId, Long eventId, CommentDto commentDto) {
         User user = getUser(userId);

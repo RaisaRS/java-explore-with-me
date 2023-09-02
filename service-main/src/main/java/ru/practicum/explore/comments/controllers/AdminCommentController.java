@@ -16,6 +16,7 @@ import ru.practicum.explore.comments.service.CommentService;
 @RequestMapping("/admin/events/comments")
 public class AdminCommentController {
     private final CommentService commentService;
+
     @DeleteMapping("/{commentId}")
     public void deleteCommentByAdmin(@PathVariable Long commentId) {
         log.info("Комментарий удалён администратором");

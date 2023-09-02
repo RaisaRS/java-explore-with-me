@@ -27,7 +27,7 @@ public class PrivateCommentController {
                                        @Valid @RequestBody CommentDto commentDto) {
         log.info("Получен POST-запрос users/{userId}/events/{eventId}/comments на добавление комментария {}" +
                 " от пользователя (id): {} к событию (id): {}", commentDto, userId, eventId);
-        return commentService.saveComment(userId,eventId, commentDto);
+        return commentService.saveComment(userId, eventId, commentDto);
     }
 
 
@@ -37,7 +37,7 @@ public class PrivateCommentController {
                                          @PathVariable Long commentId,
                                          @Valid @RequestBody CommentDto commentDto) {
         log.info("Получен PATCH- запрос users/{userId}/events/{eventId}/comments/{commentId} на обновление комментария " +
-                "(id): {} от пользователя (id): {} к событию (id): {}, комментарий: {}",
+                        "(id): {} от пользователя (id): {} к событию (id): {}, комментарий: {}",
                 commentId, userId, eventId, commentDto);
         return commentService.updateComment(userId, eventId, commentId, commentDto);
     }
@@ -53,14 +53,15 @@ public class PrivateCommentController {
 
     @GetMapping("/comments")
     public List<CommentShortDto> getCommentsForEvent(@PathVariable Long userId,
-                                                              @PathVariable Long eventId,
-                                                              @RequestParam(required = false, defaultValue = "0") int from,
-                                                              @RequestParam(required = false, defaultValue = "10") int size) {
+                                                     @PathVariable Long eventId,
+                                                     @RequestParam(required = false, defaultValue = "0") int from,
+                                                     @RequestParam(required = false, defaultValue = "10") int size) {
         log.info("Получен GET- запрос /users/{userId}/events/{eventId}/comment/ (Private). " +
-                "Просмотр опубликованного комментариев (dto) к событию (id): {}, from: {} to: {}, от пользователя (id): {}",
+                        "Просмотр опубликованного комментариев (dto) к событию (id): {}, from: {} to: {}, от пользователя (id): {}",
                 eventId, from, size, userId);
         return commentService.getCommentsForEvent(userId, eventId, size, from);
     }
+
     @DeleteMapping("/{commentId}")
     public void deletedComment(@PathVariable Long userId,
                                @PathVariable Long eventId,

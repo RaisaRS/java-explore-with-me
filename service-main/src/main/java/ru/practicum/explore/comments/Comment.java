@@ -5,7 +5,6 @@ import ru.practicum.explore.event.Event;
 import ru.practicum.explore.user.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Getter
