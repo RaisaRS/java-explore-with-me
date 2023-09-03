@@ -252,8 +252,7 @@ public class EventServiceImpl implements EventService {
                 LocalDateTime datePublish = LocalDateTime.now();
                 LocalDateTime minStartDate = datePublish.plusHours(1);
                 if (eventToUpdAdmin.getEventDate().isBefore(minStartDate)) {
-                    throw new ConflictException(
-                            String.format("Дата события должна быть не ранее, чем за час до публикации", 1));
+                    throw new ConflictException("Дата события должна быть не ранее, чем за час до публикации" + 1);
                 }
                 eventToUpdAdmin.setState(PUBLISHED);
                 eventToUpdAdmin.setPublishedOn(datePublish);

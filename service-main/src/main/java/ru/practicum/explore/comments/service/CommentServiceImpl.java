@@ -94,7 +94,7 @@ public class CommentServiceImpl implements CommentService {
         getUser(userId);
         checkEvent(eventId);
 
-        var commentById = commentRepository.findByIdForEvent(EventState.PUBLISHED.toString(),
+        Comment commentById = commentRepository.findByIdForEvent(EventState.PUBLISHED.toString(),
                         eventId, commentId)
                 .orElseThrow(() -> new NotFoundException(String.format("Comment with id=%s was not found", commentId)));
 

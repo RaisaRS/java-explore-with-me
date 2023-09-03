@@ -13,6 +13,7 @@ public class CommentMapper {
 
     public Comment toComment(User user, Event event, CommentDto commentDto) {
         Comment comment = new Comment();
+        comment.setId(commentDto.getId());
         comment.setAuthor(user);
         comment.setEvent(event);
         comment.setText(commentDto.getText());
@@ -42,6 +43,7 @@ public class CommentMapper {
 
     public CommentShortDto toCommentShortDto(Comment comment) {
         CommentShortDto dto = new CommentShortDto();
+        dto.setId(comment.getId());
         dto.setAuthorName(comment.getAuthor().getName());
         dto.setText(comment.getText());
         dto.setCreated(comment.getCreated());
