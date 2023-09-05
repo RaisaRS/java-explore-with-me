@@ -22,4 +22,4 @@ public class AdminCommentController {
         log.info("Комментарий удалён администратором");
         commentService.deleteCommentByAdmin(commentId);
     }
-}
+} //////
