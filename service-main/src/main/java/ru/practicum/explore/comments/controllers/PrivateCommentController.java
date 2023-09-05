@@ -51,7 +51,7 @@ public class PrivateCommentController {
         return commentService.getCommentByIdForEvent(userId, eventId, commentId);
     }
 
-    @GetMapping("/comments")
+    @GetMapping
     public List<CommentShortDto> getCommentsForEvent(@PathVariable Long userId,
                                                      @PathVariable Long eventId,
                                                      @RequestParam(required = false, defaultValue = "0") int from,

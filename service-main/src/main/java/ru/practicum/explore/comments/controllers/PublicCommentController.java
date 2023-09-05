@@ -18,7 +18,7 @@ public class PublicCommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/comments")
+    @GetMapping
     public List<CommentShortDto> getCommentsForEvent(@PathVariable Long eventId,
                                                      @RequestParam(required = false, defaultValue = "0")
                                                      int from,

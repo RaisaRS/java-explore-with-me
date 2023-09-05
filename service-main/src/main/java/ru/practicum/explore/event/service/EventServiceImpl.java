@@ -155,7 +155,7 @@ public class EventServiceImpl implements EventService {
                 Location lc = new Location();
                 lc.setLat(eventDto.getLocation().getLat());
                 lc.setLon(eventDto.getLocation().getLon());
-                var after = locationRepository.save(lc);
+                Location after = locationRepository.save(lc);
                 eventToUpd.setLocation(after);
             } else {
                 eventToUpd.setLocation(loc.get(0));
@@ -200,7 +200,7 @@ public class EventServiceImpl implements EventService {
                 new NotFoundException(String.format("Событие не найдено", eventId)));
 
         if (eventDto.getEventDate() != null) {
-            var minStartDate = LocalDateTime.now().plusHours(1);
+            LocalDateTime minStartDate = LocalDateTime.now().plusHours(1);
             if (eventDto.getEventDate().isBefore(minStartDate)) {
                 throw new ConflictException(String.format("Событие не может быть ранее, " +
                         "чем за два часа до публикации", 1));

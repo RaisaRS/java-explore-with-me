@@ -1,6 +1,7 @@
 package ru.practicum.explore.comments;
 
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import ru.practicum.explore.event.Event;
 import ru.practicum.explore.user.User;
 
@@ -20,6 +21,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @Length(min = 2, max = 1000)
     @Column(name = "text", nullable = false)
     private String text;
 

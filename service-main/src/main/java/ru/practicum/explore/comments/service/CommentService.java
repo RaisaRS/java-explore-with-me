@@ -6,7 +6,6 @@ import ru.practicum.explore.comments.dto.CommentShortDto;
 
 import java.util.List;
 
-@Service
 public interface CommentService {
     CommentShortDto saveComment(Long userId, Long eventId, CommentDto commentDto);
 
