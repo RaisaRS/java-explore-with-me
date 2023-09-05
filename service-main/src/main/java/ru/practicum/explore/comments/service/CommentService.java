@@ -1,6 +1,5 @@
 package ru.practicum.explore.comments.service;
 
-import org.springframework.stereotype.Service;
 import ru.practicum.explore.comments.dto.CommentDto;
 import ru.practicum.explore.comments.dto.CommentShortDto;
 
