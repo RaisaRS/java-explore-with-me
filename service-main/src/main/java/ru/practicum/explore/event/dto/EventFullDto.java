@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.explore.category.dto.CategoryDto;
+import ru.practicum.explore.comments.dto.CommentDto;
 import ru.practicum.explore.enums.EventState;
 import ru.practicum.explore.location.LocationDto;
 import ru.practicum.explore.user.dto.UserShortDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Getter
@@ -37,4 +39,5 @@ public class EventFullDto {
     private Long participantLimit;
     private Boolean requestModeration;
     private EventState state;
+    private List<CommentDto> comments;
 }

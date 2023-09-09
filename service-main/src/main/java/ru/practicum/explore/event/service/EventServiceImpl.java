@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.category.Category;
 import ru.practicum.explore.category.CategoryRepository;
 import ru.practicum.explore.client.StatsClient;
+import ru.practicum.explore.comments.Comment;
+import ru.practicum.explore.comments.CommentRepository;
+import ru.practicum.explore.comments.dto.CommentMapper;
 import ru.practicum.explore.enums.EventState;
 import ru.practicum.explore.enums.RequestStatus;
 import ru.practicum.explore.enums.StateActionAdmin;
@@ -37,6 +40,7 @@ import ru.practicum.explore.useDto.dto.StatsDto;
 import ru.practicum.explore.user.User;
 import ru.practicum.explore.user.UserRepository;
 import ru.practicum.explore.util.CountConfirmedRequests;
+import ru.practicum.explore.util.CreateRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -55,6 +59,7 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     private final StatsClient statsClient;
     private final CategoryRepository categoryRepository;
@@ -107,6 +112,8 @@ public class EventServiceImpl implements EventService {
 
         EventFullDto eventFullDto = EventMapper.toEventFullDto(event);
         eventFullDto.setViews(getViews(event));
+        List<Comment> comments = commentRepository.findAllByEventId(eventId);
+        eventFullDto.setComments(CommentMapper.listToCommentDto(comments));
         log.info("Просмотр события по идентификатору пользователем, который его добавил");
         return eventFullDto;
     }
@@ -148,7 +155,7 @@ public class EventServiceImpl implements EventService {
                 Location lc = new Location();
                 lc.setLat(eventDto.getLocation().getLat());
                 lc.setLon(eventDto.getLocation().getLon());
-                var after = locationRepository.save(lc);
+                Location after = locationRepository.save(lc);
                 eventToUpd.setLocation(after);
             } else {
                 eventToUpd.setLocation(loc.get(0));
@@ -193,7 +200,7 @@ public class EventServiceImpl implements EventService {
                 new NotFoundException(String.format("Событие не найдено", eventId)));
 
         if (eventDto.getEventDate() != null) {
-            var minStartDate = LocalDateTime.now().plusHours(1);
+            LocalDateTime minStartDate = LocalDateTime.now().plusHours(1);
             if (eventDto.getEventDate().isBefore(minStartDate)) {
                 throw new ConflictException(String.format("Событие не может быть ранее, " +
                         "чем за два часа до публикации", 1));
@@ -245,8 +252,7 @@ public class EventServiceImpl implements EventService {
                 LocalDateTime datePublish = LocalDateTime.now();
                 LocalDateTime minStartDate = datePublish.plusHours(1);
                 if (eventToUpdAdmin.getEventDate().isBefore(minStartDate)) {
-                    throw new ConflictException(
-                            String.format("Дата события должна быть не ранее, чем за час до публикации", 1));
+                    throw new ConflictException("Дата события должна быть не ранее, чем за час до публикации" + 1);
                 }
                 eventToUpdAdmin.setState(PUBLISHED);
                 eventToUpdAdmin.setPublishedOn(datePublish);
@@ -293,6 +299,8 @@ public class EventServiceImpl implements EventService {
         event.setViews((long) httpServletRequests.get(eventId).size());
         Event eventWithView = eventRepository.save(event);
         EventDto eventDto = EventMapper.toEventDto(eventWithView);
+        List<Comment> comments = commentRepository.findTop10ByEventIdOrderByCreatedDesc(event.getId());
+        eventDto.setComments(CommentMapper.listToCommentDto(comments));
 
         log.info("Подробная информация о событи по id: {} ", eventId);
 
@@ -368,7 +376,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventShortDto> getAllEventsByInitiatorPrivate(Long userId, int from, int size) {
-        PageRequest pageRequest = createRequest(from, size);
+        PageRequest pageRequest = CreateRequest.createRequest(from, size);
         List<Event> result = eventRepository.findAllByInitiatorId(userId, pageRequest).getContent();
         log.info("Все события, созданные инициатором");
         return result.isEmpty() ? Collections.emptyList() : EventMapper.listEventShortDto(result);
@@ -555,15 +563,5 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Категория события не найдена, id = " + categoryId));
         return category;
 
-    }
-
-    private static PageRequest createRequest(int from, int size) {
-        if (from < 0) {
-            throw new ParameterException("Параметр from должен быть положительным или нулевым.");
-        }
-        if (size <= 0) {
-            throw new ParameterException("Размер параметра должен быть положительным.");
-        }
-        return PageRequest.of(from / size, size);
     }
 }
